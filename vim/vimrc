@@ -285,8 +285,6 @@ function! RunClangCheck() abort
     endtry
 endfunction
 
-"let g:ale_c_build_dir = '/home/cohesity/workspace/main/build'
-
 " Key Mappings.
 
 " Navigate between linting errors.
