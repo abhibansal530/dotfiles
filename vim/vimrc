@@ -1,147 +1,187 @@
-"""""""""""""""""""""""""""""""""""""
-" Abhishek Bansal Vimrc configuration
-"""""""""""""""""""""""""""""""""""""
+" Install Plug {{{
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" }}}
+" Plugins {{{
+
+" Specify a directory for plugins.
+call plug#begin('~/.vim/plugged')
+
+" Gruvbox theme.
+Plug 'gruvbox-community/gruvbox'
+
+" Integrate fzf with Vim.
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+
+" Navigate and manipulate files in a tree view.
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind']}
+
+" Modify * to also work with visual selections.
+Plug 'nelstrom/vim-visual-star-search'
+
+" Handle focus events from tmux in vim.
+Plug 'tmux-plugins/vim-tmux-focus-events'
+
+" Share clipboard between vim and tmux.
+Plug 'roxma/vim-tmux-clipboard'
+
+" Navigate seamlessly between vim and tmux splits.
+Plug 'christoomey/vim-tmux-navigator'
+
+" Toggle comments in various ways.
+Plug 'tpope/vim-commentary'
+
+" Surround text with quotes, parenthesis, brackets, and more.
+Plug 'tpope/vim-surround'
+
+" A git wrapper.
+Plug 'tpope/vim-fugitive'
+
+" Status bar and icons.
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'
+
+" Dispatch tasks from vim.
+Plug 'tpope/vim-dispatch'
+
+" Vim LSP support.
+Plug 'w0rp/ale'
+
+" Languages and file types.
+Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
+Plug 'faith/vim-go'
+
+call plug#end()
+
+" }}}
+" Basic Settings {{{
+" For details use :help 'setting'
+
+set autoindent
+set backspace=indent,eol,start
+set colorcolumn=80
 set encoding=utf-8
-set tags=tags;/ " To set ctags tags file
-set tabstop=4
-set softtabstop=0 noexpandtab
-set shiftwidth=4
-set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+set hlsearch
+set incsearch
+set lazyredraw
+set modelines=2
+set nocompatible
 set noswapfile
+set number
+set showmatch
+set textwidth=80
+set t_Co=256
+set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*,*.pyc,node_modules/*
+set wildmenu
 
-" Vim Plugins {{{
+" }}}
+" GUI {{{
 
+" -----------------------------------------------------------------------------
+" Color Settings.
+" -----------------------------------------------------------------------------
+
+colorscheme gruvbox
+" For Gruvbox to look correct in terminal Vim you'll want to source a palette
+" script that comes with the Gruvbox plugin.
+"
+" Add this to your ~/.profile file:
+"   source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
+
+" Gruvbox comes with both a dark and light theme.
+set background=dark
+
+" Gruvbox has 'hard', 'medium' (default) and 'soft' contrast options.
+let g:gruvbox_contrast_light='hard'
+
+" This needs to come last, otherwise the colors aren't correct.
 syntax on
 
-set nocompatible
+" -----------------------------------------------------------------------------
+" Status line
+" -----------------------------------------------------------------------------
 
-" Disable filetype for vundle
-filetype off
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" Utility {{{
-Plugin 'scrooloose/nerdtree'  " Navigate files
-Plugin 'junegunn/fzf.vim'     " Vim wrapper around fzf
-Plugin 'tpope/vim-fugitive'  " Git plugin
-" Plugin 'Shougo/deoplete.nvim'   " For autocompletion
-" Plugin 'roxma/nvim-yarp'        " Required for deoplete
-" Plugin 'roxma/vim-hug-neovim-rpc'  " Required for deoplete
-" let g:deoplete#enable_at_startup = 1 " Enable deoplete at startup
-
-" Plugin 'jeetsukumaran/vim-buffergator'  " Buffer management
-Plugin 'mileszs/ack.vim'  " Search Tool
-Plugin 'jremmen/vim-ripgrep'  " Ripgrep integration
-"let g:ackprg = 'ag --nogroup --nocolor --column' " Ag integration
-"let g:ackprg = 'ag --vimgrep' " Ag integration
-let g:rg_command = 'rg --vimgrep'
-let g:ackprg = 'rg --vimgrep' " Rg integration
-" }}}
-
-" Text manipulation {{{
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-surround'
-" }}}
-" Theme / Interface {{{
-Plugin 'flazz/vim-colorschemes'  " Vim colorschemes
-Plugin 'morhetz/gruvbox'         " Gruvbox colorscheme
-Plugin 'vim-airline/vim-airline'  " Status bar for Vim
-Plugin 'vim-airline/vim-airline-themes'  " themes for vim airline
-Plugin 'ryanoasis/vim-devicons'  " Cool icons
-" }}}
-" Generic Programming {{{
-" Plugin 'vim-syntastic/syntastic' " Syntax Checker
-" Plugin 'majutsushi/tagbar' " Browse tags of current file
-Plugin 'tpope/vim-dispatch'  " Vim dispatch
-Plugin 'w0rp/ale'
-" }}}
-
-call vundle#end()
-filetype plugin indent on
-" }}}
-" Language specific {{{
-Plugin 'fatih/vim-go'
-" disable go-fmt on save due to tab indentation
-let g:go_fmt_autosave = 0
-" }}}
-" Airline Config {{{
-
-" Always display status line
+" Always display status line.
 set laststatus=2
 
-" Use 256 colours
-set t_Co=256
-
-let g:airline_theme = 'minimalist'  " Set theme for vim-airline
-"let g:airline_theme = 'gruvbox'  " Set theme for vim-airline
-let g:airline_powerline_fonts = 1 " Enable powerline fonts for airline
+" Airline Settings.
+let g:airline_theme = 'gruvbox'
+let g:airline_powerline_fonts = 1
 let g:Powerline_symbols = 'unicode'
 let g:Powerline_symbols = 'fancy'
-let g:airline#extensions#tabline#enabled = 1 " Display all buffers when only one tab is open
+let g:airline#extension#tabline#enabled = 1
 let g:hybrid_custom_term_colors = 1
 let g:hybrid_reduced_contrast = 1
 
-" let g:airline_left_sep = "\uE0B4"  " Change glyphs for left arrow
-" let g:airline_right_sep = "\uE0B6" " Change glyph for right arrow
+" }}}
+" Key Mappings {{{
+
+" Avoid a shift press.
+nnoremap ; :
+vnoremap ; :
+
+" Escape is far.
+inoremap jk <ESC>
+
+" Seamlessly treat visual lines as actual lines when moving around.
+noremap j gj
+noremap k gk
+noremap <Down> gj
+noremap <Up> gk
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
+
+" Use tab and shift-tab to cycle through windows.
+nnoremap <Tab> <C-W>w
+nnoremap <S-Tab> <C-W>W
+
+" Navigate around splits with a single key combo.
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-h> <C-w><C-h>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-j> <C-w><C-j>
+
+" -----------------------------------------------------------------------------
+" Leader Shortcuts.
+" -----------------------------------------------------------------------------
+
+let mapleader = ","
+
+" Clear search highlights.
+nnoremap <silent> <leader><Space> :nohlsearch<cr><C-L>
+
+" Find and replace word under cursor
+nnoremap <Leader>s :%s/\<<C-R><C-W>\>/<C-R><C-W>/g<Left><Left>
+nnoremap <Leader>sc :%s/\<<C-R><C-W>\>/<C-R><C-W>/gc<Left><Left><Left>
+
+" Same as above but replace is limited to visual selection.
+xnoremap <Leader>s :s/\<<C-R><C-W>\>/<C-R><C-W>/g<Left><Left>
+xnoremap <Leader>sc :s/\<<C-R><C-W>\>/<C-R><C-W>/gc<Left><Left><Left>
+
+" For searching and replacing arbitrary visual selections use these :
+
+" Press * to search for the term under the cursor or a visual selection and
+" then press a key below to replace all instances of it in the current file.
+nnoremap <Leader>r :%s///g<Left><Left>
+nnoremap <Leader>rc :%s///gc<Left><Left><Left>
+
+" Same as above but replace is limited to visual selection.
+xnoremap <Leader>r :s///g<Left><Left>
+xnoremap <Leader>rc :s///gc<Left><Left><Left>
 
 " }}}
-" Syntastic Config {{{
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
+" Plugin Settings {{{
 
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 0
-" let g:syntastic_check_on_wq = 0
-" let g:syntastic_cpp_checkers = []
-" }}}
-" ALE Config {{{
-" General
-let g:airline#extensions#ale#enabled = 1  " ALE airline integration
-let g:ale_set_loclist = 0  " Disable loc-list
-let g:ale_set_quickfix = 1  " Use quickfix instead of loc-list
-let g:ale_completion_enabled = 1
+" .............................................................................
+" junegunn/fzf.vim
+" .............................................................................
 
-" Linter
-let g:ale_linters_explicit = 1  " Only run linters set in ale_linters
-let g:ale_lint_on_enter = 0  " Don't lint on opening file
-let g:ale_lint_on_text_changed = 0 " Don't lint on every text change
-let g:ale_lint_on_save = 1 " Lint after saving
-let g:ale_linters = {'cpp': ['cpplint'], 'rust': ['rls']}
-let g:ale_fixers = {'rust': ['rustfmt']}
-"let g:ale_cpp_cpplint_executable = '/Users/abhishek.bansal/cpplint.py'
-"let g:ale_cpp_clangcheck_executable = ''
-let g:ale_cpp_cpplint_linelength = 79
-let g:ale_rust_rls_toolchain = 'stable'
-"let g:ale_linters_ignore = {'cpp' : ['clangcheck']}
-
-" To Run specific linter manually.
-function! RunClangCheck() abort
-    try
-        let b:ale_linters={'cpp' : ['clangcheck']}
-        ALELint
-    finally
-        unlet b:ale_linters
-    endtry
-endfunction
-
-
-" Key Mappings
-" Navigate between linting errors.
-nnoremap <silent> aj :ALENext<CR>
-nnoremap <silent> ak :ALEPrevious<CR>
-" Go to definition.
-nnoremap <silent> ag :ALEGoToDefinition<CR>
-" }}}
-" fzf Config {{{
-set rtp+=/usr/local/opt/fzf
-" Customize fzf colors to match your color scheme
+" Customize fzf colors to match your color scheme.
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -156,97 +196,14 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
-" }}}
-" UI Config {{{
 
-set number
-set nocompatible
-set background=dark
-" Backspace fix
-set backspace=indent,eol,start
-" Don't continue comments when pressing o/O
-set formatoptions-=o
-set modelines=1
-
-syntax enable
-
-let base16colorspace=256  " Access colors present in 256 colorspace
-"let g:gruvbox_contrast_dark='hard'
-"colorscheme badwolf
-"colorscheme spacegray
-colorscheme PaperColor
-"colorscheme gruvbox
-let g:spacegray_underline_search = 1
-
-filetype indent on " load filetype-specific indentation configuraion
-
-set wildmenu " visual autocompletion for commands in vim
-set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*,*.pyc,node_modules/*
-set lazyredraw " redraw only when it is required
-
-set showmatch " highlight matching paranthesis
-" }}}
-" Searching {{{
-
-set hlsearch " Highlight matches
-
-set incsearch " search as characters are entered
-" }}}
-" Movements {{{
-
-" move vertically by visual line (not by actual line which arrows do anyway)
-nnoremap j gj
-nnoremap k gk
-
-" move to beginning/ending of line
-" nnoremap B ^
-" nnoremap E $
-
-" visually select last inserted text
-nnoremap gV `[v`]
-" }}}
-" Leader Shortcuts {{{
-let mapleader = ","
-nnoremap <silent> <leader><Space> :nohlsearch<cr><C-L>
-" nnoremap <leader>v <C-v>
-" nnoremap <leader>h <C-x>
-
-" save session
-nnoremap <leader>s :mksession!<CR>
-
-" Ag search
-nnoremap <leader>a :Ack!<Space>
-
-" CtrlP Shortcuts to toggle modes
-" map <leader>pb :CtrlPBuffer<CR>
-" map <leader>pm :CtrlPMixed<CR>
-" map <leader>pr :CtrlPMRU<CR>
-" Start CtrlP in current directory
-" nmap <leader>pc :CtrlP .<CR>
-" }}}
-" Key Mapping {{{
-
-nnoremap ; :
-vnoremap ; :
-inoremap jk <ESC>
-
-" Make j/k move screen visible lines, not file lines
-nnoremap j gj
-nnoremap k gk
-
-" Use tab and shift-tab to cycle through windows.
-nnoremap <Tab> <C-W>w
-nnoremap <S-Tab> <C-W>W
-
-" NerdTree Toggle
-map <C-n> :NERDTreeToggle<CR>
-
-" FZF mappings
+" Key Mappings.
 nmap <silent> zf :Files<CR>
 nmap zb :Buffers<CR>
 nmap zm :History<CR>
 nmap zl :Lines<CR>
 nmap zcl :BLines<CR>
+
 " Better command history with q;
 command! CmdHist call fzf#vim#command_history({'right': '40'})
 nnoremap q; :CmdHist<CR>
@@ -255,80 +212,107 @@ nnoremap q; :CmdHist<CR>
 command! QHist call fzf#vim#search_history({'right': '40'})
 nnoremap q/ :QHist<CR>
 
-nnoremap <silent> <leader>A :call SearchWordWithAg()<CR>
-vnoremap <silent> <leader>A :call SearchVisualSelectionWithAg()<CR>
-nnoremap <silent> <leader>/ :execute 'Rg ' . input('Rg/')<CR>
-" nnoremap <leader>. :AgIn
-
-" Use fuzzy completion relative filepaths across directory
-" imap <expr> <c-x><c-f> fzf#vim#complete#path('git ls-files $(git rev-parse --show-toplevel)')
-
-" End FZF mappings
-
-" */# in visual mode searches for selected text, similar to normal mode
-vnoremap * :<C-u>call <SID>VisualSetSearch('/')<cr>/<C-R>=@/<cr><cr>
-vnoremap # :<C-u>call <SID>VisualSetSearch('#')<cr>/<C-R>=@/<cr><cr>
-
-" <leader>s starts a find a replace for word under cursor
-nnoremap <leader>s :%s/\<<C-R><C-W>\>/<C-R><C-W>/g<Left><Left>
-
-" Git Grep with Ag
-command! -bang -nargs=* GGrep
-  \ call fzf#vim#grep(
-  \   'git grep --line-number '.shellescape(<q-args>), 0,
-  \   { 'dir': systemlist('git rev-parse --show-toplevel')[0] }, <bang>0)
-
-" Async Make.
-nnoremap <silent> <leader>m :execute 'Make! ' . input('Make! ')<CR>
-
-" Run Clang checker.
-nnoremap <leader>cc :call RunClangCheck()<CR>
-
-" Tagbar Toggle
-" map <C-m> :TagbarToggle<CR>
-
-" Buffergator Toggle
-"map <C-b> :BuffergatorToggle<CR>
-" Learn using vim navigation
-"nnoremap <up> <nop>
-"nnoremap <down> <nop>
-"nnoremap <left> <nop>
-"nnoremap <right> <nop>
-"inoremap <up> <nop>
-"inoremap <down> <nop>
-"inoremap <left> <nop>
-"inoremap <right> <nop>
-" }}}
-" Functions {{{
-
-function! SearchWordWithAg()
+function! SearchWordWithRg()
   execute 'Rg' expand('<cword>')
 endfunction
 
-function! SearchVisualSelectionWithAg() range
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  let old_clipboard = &clipboard
-  set clipboard&
-  normal! ""gvy
-  let selection = getreg('"')
-  call setreg('"', old_reg, old_regtype)
-  let &clipboard = old_clipboard
+function! SearchVisualSelectionWithRg() range
+  let old_reg_val = @x
+  normal! gv"xy
+  let selection = getreg('x')
+  let @s = old_reg_val
   execute 'Rg' selection
 endfunction
 
-function! SearchWithAgInDirectory(...)
-  call fzf#vim#ag(join(a:000[1:], ' '), extend({'dir': a:1}, g:fzf#vim#default_layout))
-endfunction
-command! -nargs=+ -complete=dir AgIn call SearchWithAgInDirectory(<f-args>)
+" Search word under cursor with ripgrep.
+nnoremap <silent> <Leader>R :call SearchWordWithRg()<CR>
 
-" Helper for visual search
-function! s:VisualSetSearch(cmdtype)
-  let temp = @s
-  norm! gv"sy
-  let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
-  let @s = temp
+" Search current visual selection with ripgrep.
+vnoremap <silent> <Leader>R :call SearchVisualSelectionWithRg()<CR>
+
+" Invoke ripgrep search prompt.
+nnoremap <silent> <Leader>/ :execute 'Rg ' . input('Rg/')<CR>
+
+" .............................................................................
+" scrooloose/nerdtree
+" .............................................................................
+
+" NerdTree Toggle.
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+" Open nerd tree at the current file or close nerd tree if pressed again.
+nnoremap <silent> <expr> <Leader>n g:NERDTree.IsOpen() ? "\:NERDTreeClose<CR>" : bufexists(expand('%')) ? "\:NERDTreeFind<CR>" : "\:NERDTree<CR>"
+
+" .............................................................................
+" plasticboy/vim-markdown
+" .............................................................................
+
+autocmd FileType markdown let b:sleuth_automatic=0
+autocmd FileType markdown set conceallevel=0
+autocmd FileType markdown normal zR
+
+let g:vim_markdown_frontmatter=1
+
+" .............................................................................
+" w0rp/ale
+" .............................................................................
+
+" General
+let g:airline#extensions#ale#enabled = 1
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
+let g:ale_completion_enabled = 1
+
+" Linter
+let g:ale_linters_explicit = 1
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_save = 1
+let g:ale_linters = {'cpp': ['cpplint'], 'rust': ['rls']}
+let g:ale_fixers = {'rust': ['rustfmt']}
+let g:ale_cpp_cpplint_executable = '/Users/abhishek.bansal/workspace/main/open_tools/codereview/cpplint.py'
+let g:ale_cpp_clangcheck_executable = '/Users/abhishek.bansal/workspace/misc/scripts/clang_check.sh'
+let g:ale_cpp_cpplint_linelength = 79
+let g:ale_rust_rls_toolchain = 'stable'
+
+" To Run specific linter manually.
+function! RunClangCheck() abort
+    try
+        let b:ale_linters={'cpp' : ['clangcheck']}
+        ALELint
+    finally
+        unlet b:ale_linters
+    endtry
 endfunction
+
+"let g:ale_c_build_dir = '/home/cohesity/workspace/main/build'
+
+" Key Mappings.
+
+" Navigate between linting errors.
+nnoremap <silent> aj :ALENext<CR>
+nnoremap <silent> ak :ALEPrevious<CR>
+
+nnoremap <silent> ag :ALEGoToDefinition<CR>
+
+" }}}
+" Work {{{
+" .............................................................................
+" Any custom config used at my current work place.
+" .............................................................................
+
+" This is based on the assumption that I use a tmux session named 'work' at my
+" workplace.
+
+" Using list to handle any newlines in the end.
+let s:tmux_session_name = systemlist("tmux display-message -p '#S'")
+
+let s:work_config_file = '~/.vim/work.vim'
+
+if !empty(s:tmux_session_name) && s:tmux_session_name[0] ==? 'work'
+			\ && filereadable(expand(s:work_config_file))
+  exe 'source' s:work_config_file
+endif
 
 " }}}
 " vim:foldmethod=marker:foldlevel=0
