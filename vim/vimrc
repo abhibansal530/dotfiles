@@ -23,15 +23,6 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind']}
 " Modify * to also work with visual selections.
 Plug 'nelstrom/vim-visual-star-search'
 
-" Handle focus events from tmux in vim.
-Plug 'tmux-plugins/vim-tmux-focus-events'
-
-" Share clipboard between vim and tmux.
-Plug 'roxma/vim-tmux-clipboard'
-
-" Navigate seamlessly between vim and tmux splits.
-Plug 'christoomey/vim-tmux-navigator'
-
 " Toggle comments in various ways.
 Plug 'tpope/vim-commentary'
 
@@ -51,6 +42,18 @@ Plug 'tpope/vim-dispatch'
 
 " Vim LSP support.
 Plug 'w0rp/ale'
+
+" Tmux related plugins.
+if !empty($TMUX)
+  " Handle focus events from tmux in vim.
+  Plug 'tmux-plugins/vim-tmux-focus-events'
+
+  " Share clipboard between vim and tmux.
+  Plug 'roxma/vim-tmux-clipboard'
+
+  " Navigate seamlessly between vim and tmux splits.
+  Plug 'christoomey/vim-tmux-navigator'
+endif
 
 " Languages and file types.
 Plug 'godlygeek/tabular' | Plug 'plasticboy/vim-markdown'
@@ -141,10 +144,20 @@ nnoremap <Tab> <C-W>w
 nnoremap <S-Tab> <C-W>W
 
 " Navigate around splits with a single key combo.
-nnoremap <C-l> <C-w><C-l>
-nnoremap <C-h> <C-w><C-h>
-nnoremap <C-k> <C-w><C-k>
-nnoremap <C-j> <C-w><C-j>
+if !empty($TMUX)
+  let g:tmux_navigator_no_mappings = 1
+  let g:tmux_navigator_disable_when_zoomed = 1
+
+  nnoremap <silent> <C-h> :TmuxNavigateLeft<CR>
+  nnoremap <silent> <C-j> :TmuxNavigateDown<CR>
+  nnoremap <silent> <C-k> :TmuxNavigateUp<CR>
+  nnoremap <silent> <C-l> :TmuxNavigateRight<CR>
+else
+  nnoremap <silent> <C-h> <C-w><C-h>
+  nnoremap <silent> <C-j> <C-w><C-j>
+  nnoremap <silent> <C-k> <C-w><C-k>
+  nnoremap <silent> <C-l> <C-w><C-l>
+endif
 
 " -----------------------------------------------------------------------------
 " Leader Shortcuts.
