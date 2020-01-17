@@ -2,27 +2,22 @@
 #### BEGIN COLOUR
 
 # default statusbar colors
-set-option -g status-bg "colour237" #base02
-set-option -g status-fg "colour 223" #yellow
-set-option -g status-attr default
+set -g status-style fg='colour223',bg='colour237',default
 
 # default window title colors
-set-window-option -g window-status-fg brightblue #base0
-set-window-option -g window-status-bg default
+set -g window-status-style fg=brightblue,bg=default
 #set-window-option -g window-status-attr dim
 
 # active window title colors
-set-window-option -g window-status-current-fg brightred #orange
-set-window-option -g window-status-current-bg default
+set -g window-status-current-style fg=brightred,bg=default
 #set-window-option -g window-status-current-attr bright
 
 # pane border
-set-option -g pane-border-fg black #base02
-set-option -g pane-active-border-fg "colour223" #base01
+set -g pane-border-style fg=black
+set -g pane-active-border-style fg='colour223'
 
 # message text
-set-option -g message-bg black #base02
-set-option -g message-fg brightred #orange
+set -g message-style fg=brightred,bg=black
 
 # pane number display
 set-option -g display-panes-active-colour blue #blue

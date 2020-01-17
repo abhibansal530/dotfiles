@@ -43,6 +43,13 @@ Plug 'tpope/vim-dispatch'
 " Vim LSP support.
 Plug 'w0rp/ale'
 
+" Personal wiki in vim.
+Plug 'vimwiki/vimwiki'
+Plug 'tbabej/taskwiki'
+
+" Ascii drawing in vim.
+Plug 'vim-scripts/DrawIt'
+
 " Tmux related plugins.
 if !empty($TMUX)
   " Handle focus events from tmux in vim.
@@ -81,6 +88,7 @@ set textwidth=80
 set t_Co=256
 set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*,*.pyc,node_modules/*
 set wildmenu
+set ttyfast
 
 " }}}
 " GUI {{{
@@ -157,6 +165,11 @@ else
   nnoremap <silent> <C-j> <C-w><C-j>
   nnoremap <silent> <C-k> <C-w><C-k>
   nnoremap <silent> <C-l> <C-w><C-l>
+endif
+
+" Preview markdown.
+if executable('grip')
+  nnoremap <buffer><space>m :Dispatch grip -b %<CR>
 endif
 
 " -----------------------------------------------------------------------------
@@ -306,6 +319,41 @@ nnoremap <silent> ak :ALEPrevious<CR>
 
 nnoremap <silent> ag :ALEGoToDefinition<CR>
 
+" .............................................................................
+" vimwiki/vimwiki
+" .............................................................................
+
+" Make sure vimwiki doesn't own all .md files.
+let g:vimwiki_global_ext = 0
+
+" Enable spell checking for wiki files.
+autocmd FileType vimwiki set spell spelllang=en_us
+
+" Personal wiki.
+let my_wiki = {}
+let my_wiki.path = '~/my/wiki/'
+let my_wiki.path_html = '~/my/wiki/html/'
+let my_wiki.syntax = 'markdown'
+let my_wiki.ext = '.md'
+
+" Work related wiki.
+" let work_wiki = {}
+
+" List of all wikis.
+let g:vimwiki_list = [my_wiki]
+
+" }}}
+" Autocommands {{{
+
+" Update a buffer's contents on focus if it changed outside of Vim.
+autocmd FocusGained,BufEnter * :checktime
+
+" Unset paste on InsertLeave.
+autocmd InsertLeave * silent! set nopaste
+
+" Enable spell check for git commits.
+autocmd BufNewFile,BufRead COMMIT_EDITMSG setlocal spell
+
 " }}}
 " Work {{{
 " .............................................................................
@@ -321,7 +369,7 @@ let s:tmux_session_name = systemlist("tmux display-message -p '#S'")
 let s:work_config_file = '~/.vim/work.vim'
 
 if !empty(s:tmux_session_name) && s:tmux_session_name[0] ==? 'work'
-			\ && filereadable(expand(s:work_config_file))
+                        \ && filereadable(expand(s:work_config_file))
   exe 'source' s:work_config_file
 endif
 
