@@ -67,22 +67,20 @@
   (require 'find-lisp)
   (setq abhi/org-agenda-directory "~/org/gtd/")
   (setq org-agenda-files
-        (find-lisp-find-files abhi/org-agenda-directory "\.org$")))
-
-(after! org (add-to-list 'org-capture-templates
-      `("i" "inbox" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
-           "* TODO %?")))
-
-(after! org (add-to-list 'org-capture-templates
-             `("c" "org-protocol-capture" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
-               "* TODO [[%:link][%:description]]\n\n %i"
-               :immediate-finish t)))
+        (find-lisp-find-files abhi/org-agenda-directory "\.org$"))
+  (setq org-refile-targets '(("~/org/gtd/next.org" :level . 0)
+                             ("~/org/gtd/someday.org" :level . 0)
+                             ("~/org/gtd/reading.org" :level . 1)
+                             ("~/org/gtd/projects.org" :maxlevel . 1)))
+  (add-to-list 'org-capture-templates
+        `("i" "inbox" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
+             "* TODO %?"))
+  (add-to-list 'org-capture-templates
+               `("c" "org-protocol-capture" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
+                 "* TODO [[%:link][%:description]]\n\n %i"
+                 :immediate-finish t)))
 
 (setq org-refile-allow-creating-parent-nodes 'confirm)
-(setq org-refile-targets '(("next.org" :level . 0)
-                           ("someday.org" :level . 0)
-                           ("reading.org" :level . 1)
-                           ("projects.org" :maxlevel . 1)))
 
 (add-to-list 'load-path "~/.emacs.d/.local/straight/repos/org-mode/lisp/org-protocol.el")
 (require 'org-protocol)
