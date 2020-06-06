@@ -57,6 +57,11 @@
 ;; (define-key evil-normal-state-map ";" ":")
 ;; (define-key evil-motion-state-map ";" 'evil-ex)
 
+;; Font
+(setq doom-font (font-spec :family "Source Code Pro" :size 18))
+
+(load-theme 'doom-gruvbox t)
+
 (defun abhi/tag-inbox-capture ()
   (when (seq-contains '("i" "c") (plist-get org-capture-plist :key))
     (org-toggle-tag "INBOX" 'on)))
@@ -65,12 +70,17 @@
 
 (after! org
   (require 'find-lisp)
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
   (setq abhi/org-agenda-directory "~/org/gtd/")
-  (setq org-agenda-files
-        (find-lisp-find-files abhi/org-agenda-directory "\.org$"))
+  (setq org-agenda-files '("~/org/gtd/inbox.org"
+                           "~/org/gtd/projects.org"
+                           "~/org/gtd/next.org"))
   (setq org-refile-targets '(("~/org/gtd/next.org" :level . 0)
                              ("~/org/gtd/someday.org" :level . 0)
                              ("~/org/gtd/reading.org" :level . 1)
+                             ("~/org/gtd/watch.org" :level . 1)
                              ("~/org/gtd/projects.org" :maxlevel . 1)))
   (add-to-list 'org-capture-templates
         `("i" "inbox" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
@@ -158,3 +168,37 @@
 
 (map! :map org-agenda-mode-map
       "r" #'abhi/org-process-inbox)
+
+(use-package! org-agenda
+  :init
+  :config
+  (setq org-columns-default-format "%40ITEM(Task) %Effort(EE){:} %CLOCKSUM(Time Spent) %SCHEDULED(Scheduled) %DEADLINE(Deadline)")
+  (setq org-agenda-custom-commands `(("c" "Agenda"
+                                      ((agenda ""
+                                               ((org-agenda-span 'week)
+                                                (org-deadline-warning-days 365)))
+                                       (todo "TODO"
+                                             ((org-agenda-overriding-header "To Refile")
+                                              (org-agenda-files '(,(concat abhi/org-agenda-directory "inbox.org")))))
+                                       (todo "NEXT"
+                                             ((org-agenda-overriding-header "In Progress")
+                                              (org-agenda-files '(,(concat abhi/org-agenda-directory "projects.org")
+                                                                  ,(concat abhi/org-agenda-directory "next.org")))
+                                              ))
+                                       (todo "TODO"
+                                             ((org-agenda-overriding-header "Projects")
+                                              (org-agenda-files '(,(concat abhi/org-agenda-directory "projects.org")))
+                                              ))
+                                       (todo "TODO"
+                                             ((org-agenda-overriding-header "One-off Tasks")
+                                              (org-agenda-files '(,(concat abhi/org-agenda-directory "next.org")))
+                                              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+(use-package org-download
+  :ensure t
+  :defer t
+  :init
+  ;; Add handlers for drag-and-drop when Org is loaded.
+  (with-eval-after-load 'org
+    (org-download-enable))
+  :config
+  (setq org-download-screenshot-method "screencapture -i %s"))
