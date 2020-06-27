@@ -19,12 +19,14 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "monospace" :size 14))
+;; (setq doom-font (font-spec :family "monospace" :size 14))
+;; (setq doom-font (font-spec :family "Source Code Pro" :size 18))
+(setq doom-font (font-spec :family "Meslo LG S for Powerline" :size 18))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-one)
+(setq doom-theme 'gruvbox-dark-soft)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -57,10 +59,7 @@
 ;; (define-key evil-normal-state-map ";" ":")
 ;; (define-key evil-motion-state-map ";" 'evil-ex)
 
-;; Font
-(setq doom-font (font-spec :family "Source Code Pro" :size 18))
-
-(load-theme 'doom-gruvbox t)
+;; (load-theme 'gruvbox-dark-soft-theme t)
 
 (defun abhi/tag-inbox-capture ()
   (when (seq-contains '("i" "c") (plist-get org-capture-plist :key))
@@ -169,6 +168,7 @@
 (map! :map org-agenda-mode-map
       "r" #'abhi/org-process-inbox)
 
+;; Org agenda.
 (use-package! org-agenda
   :init
   :config
@@ -193,12 +193,38 @@
                                              ((org-agenda-overriding-header "One-off Tasks")
                                               (org-agenda-files '(,(concat abhi/org-agenda-directory "next.org")))
                                               (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
-(use-package org-download
-  :ensure t
-  :defer t
-  :init
-  ;; Add handlers for drag-and-drop when Org is loaded.
-  (with-eval-after-load 'org
-    (org-download-enable))
+
+(use-package! org-roam
+  :hook
+  (after-init . org-roam-mode)
   :config
-  (setq org-download-screenshot-method "screencapture -i %s"))
+  (setq org-roam-ref-capture-templates
+        '(("r" "ref" plain (function org-roam-capture--get-point)
+           "%?"
+           :file-name "${slug}"
+           :head "#+TITLE: ${title}
+    #+ROAM_KEY: ${ref}
+    #+ROAM_TAGS: Website
+    - source :: ${ref}"
+           :unnarrowed t)))
+  (setq +org-roam-open-buffer-on-find-file nil))
+
+;; (use-package! org-roam-protocol
+;;   :after org-protocol)
+
+;; Org jounral.
+(use-package org-journal
+  :custom
+  (org-journal-dir (concat org-roam-directory "/journal"))
+  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-date-format "%A, %d %B %Y"))
+
+;; Deft.
+(use-package deft
+      :after org
+      :custom
+      (deft-recursive t)
+      (deft-use-filter-string-for-filename t)
+      (deft-default-extension "org")
+      (deft-directory org-roam-directory))

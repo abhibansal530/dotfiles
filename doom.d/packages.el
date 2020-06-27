@@ -47,5 +47,7 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 (package! anki-editor)
-(package! org-download)
-(package! solarized-theme)
+(package! protobuf-mode)
+(package! gruvbox-theme)
+(package! vagrant-tramp)
+(disable-packages! ccls)
