@@ -61,80 +61,94 @@
 
 ;; (load-theme 'gruvbox-dark-soft-theme t)
 
-(defun abhi/tag-inbox-capture ()
-  (when (seq-contains '("i" "c") (plist-get org-capture-plist :key))
-    (org-toggle-tag "INBOX" 'on)))
-
-(add-hook 'org-capture-before-finalize-hook 'abhi/tag-inbox-capture)
+;; To apply any custom tag(s) to captured items.
+;(defun abhi/tag-inbox-capture ()
+;  (when (seq-contains '("c") (plist-get org-capture-plist :key))
+;    (org-toggle-tag "PROTOCOL" 'on)))
+;
+;(add-hook 'org-capture-before-finalize-hook 'abhi/tag-inbox-capture)
 
 (after! org
   (require 'find-lisp)
+  (setq org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.11.0_1/libexec/ditaa-0.11.0-standalone.jar")
+  (setq org-startup-folded t)
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+        '((sequence "TODO(t)" "NEXT(n)" "SOMEDAY(s)" "PROJECT(p)" "|" "DONE(d)")
           (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")))
   (setq abhi/org-agenda-directory "~/org/gtd/")
-  (setq org-agenda-files '("~/org/gtd/inbox.org"
-                           "~/org/gtd/projects.org"
-                           "~/org/gtd/next.org"))
-  (setq org-refile-targets '(("~/org/gtd/next.org" :level . 0)
-                             ("~/org/gtd/someday.org" :level . 0)
-                             ("~/org/gtd/reading.org" :level . 1)
-                             ("~/org/gtd/watch.org" :level . 1)
-                             ("~/org/gtd/projects.org" :maxlevel . 1)))
-  (add-to-list 'org-capture-templates
-        `("i" "inbox" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
-             "* TODO %?"))
-  (add-to-list 'org-capture-templates
-               `("c" "org-protocol-capture" entry (file ,(concat abhi/org-agenda-directory "inbox.org"))
-                 "* TODO [[%:link][%:description]]\n\n %i"
-                 :immediate-finish t)))
+
+  ;; Alghout all of these are not required for agenda, but adding these allow for
+  ;; searching tags across all these files.
+  (setq org-agenda-files (append '("~/org/gtd/inbox.org" "~/org/gtd/life.org" "~/org/gtd/projects.org")
+                                 (directory-files-recursively "~/org/resources" "\\.org$")))
+
+  (setq org-complete-tags-always-offer-all-agenda-tags t)
+
+  (setq org-refile-targets '(("~/org/gtd/projects.org" :maxlevel . 1)
+                             ("~/org/gtd/life.org" :maxlevel . 3)))
+
+  (setq org-capture-templates
+        `(("i" "Inbox")
+
+          ("iP" "Personal inbox" entry
+           (file "~/org/gtd/inbox.org")
+           (file "~/org/capture-templates/inbox.txt")
+           :empty-lines-after 1)
+
+          ("iW" "Work inbox" entry
+           (file "~/org/gtd/work/inbox.org")
+           (file "~/org/capture-templates/inbox.txt")
+           :empty-lines-after 1)
+
+          ("c" "org-protocol-capture" entry
+           (file "~/org/gtd/inbox.org")
+           (file "~/org/capture-templates/protocol.txt")
+           :immediate-finish t)
+
+          ("g" "GTD templates")
+
+          ("gp" "Create a daily plan")
+
+          ("gpP" "Daily plan private" plain
+           (file+olp+datetree "~/org/gtd/planner.org")
+           (file "~/org/capture-templates/daily-plan.txt")
+           :immediate-finish t)
+
+          ("gpW" "Daily plan work" plain
+           (file+olp+datetree "~/org/gtd/work/planner.org")
+           (file "~/org/capture-templates/daily-plan-work.txt")
+           :immediate-finish t)
+
+          ("gr" "Review templates")
+
+          ("grd" "Daily review" plain
+           (file+olp+datetree "~/org/gtd/life.org" "GTD" "Daily Review")
+           (file "~/org/capture-templates/daily-review.txt")
+           :immediate-finish t
+           :jump-to-captured t)
+
+          ("grw" "Weekly review" plain
+           (file+olp+datetree "~/org/gtd/life.org" "GTD" "Weekly Review")
+           (file "~/org/capture-templates/weekly-review.txt")
+           :immediate-finish t
+           :jump-to-captured t)
+
+          ("r" "Capture a resource")
+
+          ("rB" "Book" entry
+           (file "~/org/resources/books.org")
+           (file "~/org/capture-templates/book.txt")
+           :empty-lines-after 2))))
 
 (setq org-refile-allow-creating-parent-nodes 'confirm)
 
 (add-to-list 'load-path "~/.emacs.d/.local/straight/repos/org-mode/lisp/org-protocol.el")
 (require 'org-protocol)
 
-;; Taken from https://github.com/jethrokuan/dots/blob/master/.doom.d/config.el
-(defvar abhi/org-agenda-bulk-process-key ?f
-  "Default key for bulk processing inbox items.")
-
-(defun abhi/org-process-inbox ()
-  "Called in org-agenda-mode, processes all inbox items."
-  (interactive)
-  (org-agenda-bulk-mark-regexp "inbox:")
-  (abhi/bulk-process-entries))
-
-(defvar abhi/org-current-effort "1:00"
-  "Current effort for agenda items.")
-
-(defun abhi/my-org-agenda-set-effort (effort)
-  "Set the effort property for the current headline."
-  (interactive
-   (list (read-string (format "Effort [%s]: " abhi/org-current-effort) nil nil abhi/org-current-effort)))
-  (setq abhi/org-current-effort effort)
-  (org-agenda-check-no-diary)
-  (let* ((hdmarker (or (org-get-at-bol 'org-hd-marker)
-                       (org-agenda-error)))
-         (buffer (marker-buffer hdmarker))
-         (pos (marker-position hdmarker))
-         (inhibit-read-only t)
-         newhead)
-    (org-with-remote-undo buffer
-      (with-current-buffer buffer
-        (widen)
-        (goto-char pos)
-        (org-show-context 'agenda)
-        (funcall-interactively 'org-set-effort nil abhi/org-current-effort)
-        (end-of-line 1)
-        (setq newhead (org-get-heading)))
-      (org-agenda-change-all-lines newhead hdmarker))))
-
 (defun abhi/org-agenda-process-inbox-item ()
   "Process a single item in the org-agenda."
   (org-with-wide-buffer
    (org-agenda-set-tags)
-   (org-agenda-priority)
-   (call-interactively 'abhi/my-org-agenda-set-effort)
    (org-agenda-refile nil nil t)))
 
 (defun abhi/bulk-process-entries ()
@@ -165,6 +179,12 @@
                            skipped))
                  (if (not org-agenda-persistent-marks) "" " (kept marked)")))))
 
+(defun abhi/org-process-inbox ()
+  "Called in org-agenda-mode, processes all inbox items."
+  (interactive)
+  (org-agenda-bulk-mark-regexp "new:")
+  (abhi/bulk-process-entries))
+
 (map! :map org-agenda-mode-map
       "r" #'abhi/org-process-inbox)
 
@@ -192,7 +212,12 @@
                                        (todo "TODO"
                                              ((org-agenda-overriding-header "One-off Tasks")
                                               (org-agenda-files '(,(concat abhi/org-agenda-directory "next.org")))
-                                              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled)))))))))
+                                              (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))))))
+
+                                     ("i" "Inbox"
+                                      ((todo ""
+                                            ((org-agenda-overriding-header "To Refile")
+                                             (org-agenda-files '(,(concat abhi/org-agenda-directory "inbox.org"))))))))))
 
 (use-package! org-roam
   :hook
@@ -208,6 +233,10 @@
     - source :: ${ref}"
            :unnarrowed t)))
   (setq +org-roam-open-buffer-on-find-file nil))
+
+(eval-after-load "artist"
+  '(define-key artist-mode-map [(down-mouse-3)] 'artist-mouse-choose-operation)
+  )
 
 ;; (use-package! org-roam-protocol
 ;;   :after org-protocol)
@@ -228,3 +257,78 @@
       (deft-use-filter-string-for-filename t)
       (deft-default-extension "org")
       (deft-directory org-roam-directory))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(safe-local-variable-values
+   (quote
+    ((whitespace-line-column . 80)
+     (whitespace-style quote
+                       (face lines-tail))))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;; http://www.howardism.org/Technical/Emacs/getting-more-boxes-done.html
+;; https://mollermara.com/blog/Fast-refiling-in-org-mode-with-hydras/
+
+(defmacro my-org-make-refile-command (fn-suffix refile-targets)
+  "Generate a command to call `org-refile' with modified targets."
+  `(defun ,(intern (concat "my-org-refile-" (symbol-name fn-suffix))) ()
+     ,(format "`org-refile' to %S" refile-targets)
+     (interactive)
+     (org-refile-cache-clear)
+     (let ((org-refile-target-verify-function nil)
+           (org-refile-history nil)
+           (org-refile-targets ,refile-targets))
+       (if (eq major-mode 'org-agenda-mode)
+           (call-interactively 'org-agenda-refile)
+         (call-interactively 'org-refile)))))
+
+(my-org-make-refile-command course '(("~/org/resources/courses.org" :maxlevel . 1)))
+(my-org-make-refile-command link '(("~/org/resources/links.org" :maxlevel . 1)))
+(my-org-make-refile-command paper '(("~/org/resources/papers.org" :maxlevel . 1)))
+(my-org-make-refile-command read '(("~/org/resources/readings.org" :maxlevel . 1)))
+(my-org-make-refile-command watch '(("~/org/resources/watch.org" :maxlevel . 1)))
+(my-org-make-refile-command project '(("~/org/gtd/projects.org" :maxlevel . 1)))
+(my-org-make-refile-command people '(("~/org/resources/people.org" :maxlevel . 1)))
+
+(defhydra my-org-refile-hydra (:hint nil :foreign-keys run)
+  "
+^Refile^            ^Goto^                     ^Dired^
+------------------------------------------------------
+_p_: Projects       _g j_: Last refile         _d r_: Resources
+_P_: Papers         _g r_: To Read
+_c_: Courses        _g p_: Projects
+_l_: Links
+_r_: To Read
+_w_: To Watch
+_o_: People
+_R_: Refile
+"
+  ("c" my-org-refile-course)
+  ("l" my-org-refile-link)
+  ("p" my-org-refile-project)
+  ("P" my-org-refile-paper)
+  ("r" my-org-refile-read)
+  ("w" my-org-refile-watch)
+  ("o" my-org-refile-people)
+  ("R" org-refile)
+  ("g j" org-refile-goto-last-stored :exit t)
+  ("g r" (find-file-other-window "~/org/resources/readings.org") :exit t)
+  ("g p" (find-file-other-window "~/org/gtd/projects.org") :exit t)
+  ("d r" (dired "~/org/resources") :exit t)
+  ("q" nil "cancel"))
+
+(global-set-key (kbd "<f9> r") 'my-org-refile-hydra/body)
+
+(use-package! nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (setq nov-save-place-file (concat doom-cache-dir "nov-places")))
