@@ -291,6 +291,7 @@
            (call-interactively 'org-agenda-refile)
          (call-interactively 'org-refile)))))
 
+(my-org-make-refile-command book '(("~/org/resources/books.org" :maxlevel . 2)))
 (my-org-make-refile-command course '(("~/org/resources/courses.org" :maxlevel . 1)))
 (my-org-make-refile-command link '(("~/org/resources/links.org" :maxlevel . 1)))
 (my-org-make-refile-command paper '(("~/org/resources/papers.org" :maxlevel . 1)))
@@ -305,13 +306,15 @@
 ------------------------------------------------------
 _p_: Projects       _g j_: Last refile         _d r_: Resources
 _P_: Papers         _g r_: To Read
-_c_: Courses        _g p_: Projects
+_b_: Books          _g p_: Projects
+_c_: Courses
 _l_: Links
 _r_: To Read
 _w_: To Watch
 _o_: People
 _R_: Refile
 "
+  ("b" my-org-refile-book)
   ("c" my-org-refile-course)
   ("l" my-org-refile-link)
   ("p" my-org-refile-project)

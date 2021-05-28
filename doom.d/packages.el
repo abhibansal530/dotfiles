@@ -51,3 +51,4 @@
 (package! gruvbox-theme)
 (package! vagrant-tramp)
 (disable-packages! ccls)
+(package! nov)
