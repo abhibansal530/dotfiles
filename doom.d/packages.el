@@ -52,3 +52,4 @@
 (package! vagrant-tramp)
 (disable-packages! ccls)
 (package! nov)
+(package! elfeed-goodies)
