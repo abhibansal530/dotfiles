@@ -24,6 +24,7 @@
   home.packages = [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
     (pkgs.powerline-fonts)
+    (pkgs.ripgrep)
   ];
 
   programs = {
@@ -32,8 +33,18 @@
       settings = import ./config/alacritty.nix;
     };
 
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
     git = {
       enable = true;
+      aliases = {
+        co = "checkout";
+        cp = "cherry-pick";
+        st = "status";
+      };
       userName = "Abhishek Bansal";
       userEmail = "abhibansal530@gmail.com";
     };
@@ -52,15 +63,108 @@
       style = import ./config/waybar/style.nix;
     };
 
+    tmux = {
+      enable = true;
+      shell = "\${pkgs.zsh}/bin/zsh";
+      terminal = "xterm-256color";
+    };
+
+    vim = {
+      enable = true;
+      plugins = [
+        pkgs.vimPlugins.gruvbox-community
+        pkgs.vimPlugins.vim-nix
+        pkgs.vimPlugins.vim-surround
+      ];
+      extraConfig = ''
+        set autoindent
+        set backspace=indent,eol,start
+        set colorcolumn=80
+        set encoding=utf-8
+        set hlsearch
+        set incsearch
+        set lazyredraw
+        set modelines=2
+        set nocompatible
+        set noswapfile
+        set number
+        set showmatch
+        set textwidth=80
+        set t_Co=256
+        set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*,*.pyc,node_modules/*
+        set wildmenu
+        set ttyfast
+        
+        colorscheme gruvbox
+        set background=dark
+        
+        " Gruvbox has 'hard', 'medium' (default) and 'soft' contrast options.
+        let g:gruvbox_contrast_light='hard'
+        
+        " This needs to come last, otherwise the colors aren't correct.
+        syntax on
+        
+        " Key Mappings
+        
+        " Avoid a shift press.
+        nnoremap ; :
+        vnoremap ; :
+        
+        " Escape is far.
+        inoremap jk <ESC>
+        
+        " Seamlessly treat visual lines as actual lines when moving around.
+        noremap j gj
+        noremap k gk
+        noremap <Down> gj
+        noremap <Up> gk
+        inoremap <Down> <C-o>gj
+        inoremap <Up> <C-o>gk
+        
+        " Use tab and shift-tab to cycle through windows.
+        nnoremap <Tab> <C-W>w
+        nnoremap <S-Tab> <C-W>W
+        
+        let mapleader = ","
+        
+        " Clear search highlights.
+        nnoremap <silent> <leader><Space> :nohlsearch<cr><C-L>
+      '';
+    };
+
     zsh = {
       enable = true;
       enableAutosuggestions = true;
+      enableCompletion = true;
       initExtra = ''
         if [[ $(tty) = /dev/tty1 ]]; then
           export XDG_SESSION_TYPE="wayland" # otherwise set to tty
           exec sway
         fi
+
+        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+        ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=25
+        
+        export EDITOR='vim'
+
+        # Use Rg for file searcing in fzf
+        export FZF_DEFAULT_COMMAND="${pkgs.ripgrep}/bin/rg --files --hidden --follow"
+        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+        
+        # Key bindings
+        bindkey '^ ' autosuggest-accept
       '';
+      
+      oh-my-zsh = {
+        enable = true;
+        plugins = [
+          "git"
+        ];
+        theme = "agnoster";
+      };
+
+      shellAliases = {
+      };
     };
   };
 
@@ -87,7 +191,7 @@
     };
     temperature = {
       day = 4100;
-      night = 4000;
+      night = 3500;
     };
   };
 
