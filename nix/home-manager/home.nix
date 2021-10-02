@@ -19,6 +19,13 @@
   # changes in each release.
   home.stateVersion = "21.05";
 
+  fonts.fontconfig.enable = true;
+
+  home.packages = [
+    (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
+    (pkgs.powerline-fonts)
+  ];
+
   programs = {
     alacritty = {
       enable = true;
@@ -37,7 +44,8 @@
         layer = "bottom";
         position = "bottom";
         height = 15;
-        modules-center = [ "sway/workspaces" "network" "pulseaudio" "battery" "clock" ];
+        modules-left = [ "sway/workspaces" ];
+        modules-right = [ "network" "pulseaudio" "battery" "clock" ];
         modules = import ./config/waybar/modules.nix;
       }];
 

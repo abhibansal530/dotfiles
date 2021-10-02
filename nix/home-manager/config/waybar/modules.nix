@@ -18,8 +18,9 @@
   };
 
   "clock" = {
-    interval = 10;
-    format = "{:  %m/%d/%Y %I:%M %p}";
+    format = " {:%H:%M}";
+    tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+    format-alt = "{:%Y-%m-%d}";
   };
 
   "battery" = {

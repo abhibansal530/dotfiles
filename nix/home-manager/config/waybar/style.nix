@@ -1,90 +1,97 @@
 ''
   * {
+      border: none;
       border-radius: 0;
-      font-family: Liga SFMono Nerd Font;
-      padding-bottom: 1px;
-      padding-top: 1px;
-      font-size: 11px;
+      font-family: 'SauceCodePro Nerd Font';
+      font-size: 14px;
       min-height: 0;
-  
-      /* border: 10px solid transparent;
-      border-image: url(~/.config/sway/borders/dropShadowDarkOffset2.png) 30 stretch; */
   }
   
   window#waybar {
-      padding: 15px;
-      background: transparent;
-      color: white;
-  }
-  
-  tooltip {
-  	background: #2E3440;
-  	border-radius: 15px;
-  	border-width: 2px;
-  	border-style: solid;
-  	border-color: #2E3440;
-  	}
-  
-  #workspaces button {
-      padding: 5px 10px;
-      color: #D8DEE9;
-  }
-  
-  #workspaces button.focused {
-      box-shadow: 2px 2px 6px 1px black;
-      color: #2E3440;
-      background-color: #8FBCBB;
-      border-radius: 15px;
-  }
-  
-  #workspaces button.urgent {
-      color: #2E3440;
-      background-color: #BF616A;
-      border-radius: 15px;
-  }
-  
-  #workspaces button:hover {
-  	background-color: #5cEfFF;
-  	color: #2E3440;
-  	border-radius: 15px;
-  }
-  
-  #clock, #battery, #pulseaudio, #network, #workspaces {
-  	background-color: #2E3440;
-  	padding: 5px 10px;
-  	margin: 5px 0px;
+      background: #1D2021;
+      color: #FBF1C7;
   }
   
   #workspaces {
-  	background-color: #2E3440;
-  	border-radius: 15px 0px 0px 15px;
+  	background-color: #1D2021;
+  	margin: 5px;
+  	margin-left: 10px;
+  	border-radius: 5px;
+  }
+  #workspaces button {
+      padding: 0 10px;
+      color: #eceff4;
+  }
+  
+  #workspaces button.focused {
+      color: #2e3440;
+      background-color: #88c0d0;
+      border-radius: 5px;
+  }
+  
+  #workspaces button:hover {
+  	background-color: #5e81ac;
+  	border-radius: 5px;
+  }
+  
+  #custom-date, #clock, #battery, #pulseaudio, #network {
+  	background-color: #1D2021;
+  	padding: 0px 10px;
+  	margin: 5px 0px;
+  }
+  
+  #custom-date {
+  	color: #8fbcbb;
+  }
+  
+  #custom-power {
+  	color: #2e3440;
+  	background-color: #bf616a;
+  	border-radius: 5px;
+  	margin-right: 10px;
+  	margin-top: 5px;
+  	margin-bottom: 5px;
+  	margin-left: 0px;
+  	padding: 0px 10px;
   }
   
   #clock {
-      color: #EBCB8B;
-      border-radius: 0px 15px 15px 0px;
+      color: #b48ead;
+      border-radius: 0px 5px 5px 0px;
       margin-right: 10px;
   }
   
   #battery {
-      color: #A3BE8C;
+      color: #a3be8c;
+  }
+  
+  @keyframes blink {
+      to {
+          background-color: #ffffff;
+          color: black;
+      }
   }
   
   #battery.charging {
-      color: #D08770;
+      color: #a3be8c;
   }
   
-  #battery.warning:not(.charging) {
-      background-color: #2E3440;
-      color: #BF616A;
+  #battery.critical:not(.charging) {
+      background-color: #f53c3c;
+      color: #ffffff;
+      animation-name: blink;
+      animation-duration: 0.5s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
   }
   
   #network {
-  	color: #B48EAD;
-  	border-radius: 0px 0px 0px 0px;
+  	color: #d08770;
   }
   
   #pulseaudio {
-  	color: #81a1c1;
+  	color: #ebcb8b;
+  	border-radius: 5px 0px 0px 5px;
   }
 ''
