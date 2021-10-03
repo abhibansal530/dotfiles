@@ -21,16 +21,33 @@
 
   fonts.fontconfig.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (import (builtins.fetchGit {
+      url = "https://github.com/nix-community/emacs-overlay.git";
+      ref = "master";
+      rev = "5fa26165cf34adbe693b159093ea15f24f7f7ea4"; # change the revision
+    }))
+  ];
+
   home.packages = [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
     (pkgs.powerline-fonts)
     (pkgs.ripgrep)
+    (pkgs.clang)
+    (pkgs.fd)
+    (pkgs.sqlite) # For org-roam
   ];
 
   programs = {
     alacritty = {
       enable = true;
       settings = import ./config/alacritty.nix;
+    };
+    
+    emacs = {
+      enable = true;
+      package = pkgs.emacsPgtkGcc;
     };
 
     fzf = {
@@ -43,6 +60,7 @@
       aliases = {
         co = "checkout";
         cp = "cherry-pick";
+        sh = "show";
         st = "status";
       };
       userName = "Abhishek Bansal";
