@@ -30,6 +30,12 @@
     }))
   ];
 
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
+
   home.packages = [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
     (pkgs.powerline-fonts)
@@ -37,6 +43,8 @@
     (pkgs.clang)
     (pkgs.fd)
     (pkgs.sqlite) # For org-roam
+    (pkgs.nur.repos.kira-bruneau.rofi-wayland)
+    (pkgs.keepassxc)
   ];
 
   programs = {
@@ -65,6 +73,29 @@
       };
       userName = "Abhishek Bansal";
       userEmail = "abhibansal530@gmail.com";
+    };
+
+    mako = {
+      enable = true;
+      font = "SauceCodePro Nerd Font";
+      backgroundColor = "#282828";
+      textColor = "#FBF1C7";
+      borderColor = "#4C7899";
+      layer = "overlay"; # To show over fullscreen apps
+    };
+
+    rofi = {
+      enable = true;
+      package = pkgs.nur.repos.kira-bruneau.rofi-wayland;
+      font = "SauceCodePro Nerd Font 12";
+      terminal = "alacritty";
+      extraConfig = {
+        modi = "combi,drun,run";
+        sidebar-mode = true;
+        combi-mode = "drun,run";
+      };
+      theme = import ./config/rofi/theme.nix { inherit config; };
+      #extraConfig = import ./config/rofi/rofi.nix;
     };
 
     waybar = {
@@ -150,6 +181,11 @@
       '';
     };
 
+    zathura = {
+      enable = true;
+      options.selection-clipboard = "clipboard";
+    };
+
     zsh = {
       enable = true;
       enableAutosuggestions = true;
@@ -157,6 +193,8 @@
       initExtra = ''
         if [[ $(tty) = /dev/tty1 ]]; then
           export XDG_SESSION_TYPE="wayland" # otherwise set to tty
+          export QT_QPA_PLATFORM=wayland
+          export GDK_BACKEND=wayland
           exec sway
         fi
 
@@ -209,7 +247,7 @@
     };
     temperature = {
       day = 4100;
-      night = 3500;
+      night = 3000;
     };
   };
 

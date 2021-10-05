@@ -10,6 +10,8 @@
       ./hardware-configuration.nix
     ];
 
+  nixpkgs.config.allowUnfree = true;
+
   # Use the systemd-boot EFI boot loader.
   # boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" "rivafb" "i2c_nvidia_gpu" ];
   # boot.extraModprobeConfig = ''
@@ -95,6 +97,7 @@
 
   # Enable sound.
   sound.enable = true;
+  hardware.bluetooth.enable = true;
   hardware.pulseaudio.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -111,9 +114,11 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     alacritty
+    coreutils
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     firefox
+    maestral # Dropbox client
     # pulseaudio
     #sway-borders-git
   ];
@@ -150,6 +155,7 @@
     '';
   };
 
+  services.blueman.enable = true;
 
   # systemd.user.target.sway-session = {
   #   description = "Sway compositor session";
@@ -169,6 +175,10 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  networking.firewall = {
+    allowedTCPPorts = [ 17500 ];
+    allowedUDPPorts = [ 17500 ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
