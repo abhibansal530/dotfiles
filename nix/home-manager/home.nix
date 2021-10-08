@@ -36,6 +36,18 @@
     };
   };
 
+  home.sessionVariables = {
+    XDG_SESSION_TYPE = "wayland";
+    QT_QPA_PLATFORM = "wayland";
+    GDK_BACKEND = "wayland";
+    SDL_VIDEODRIVER = "wayland";
+    QT_WAYLAND_DISABLE_WINDOWDECORATOIN = 1;
+    _JAVA_AWT_WM_NONREPARENTING = 1;
+    MOZ_ENABLE_WAYLAND = 1;
+    CLUTTER_BACKEND = "wayland";
+    XDG_CURRENT_DESKTOP = "sway";
+  };
+
   home.packages = [
     (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
     (pkgs.powerline-fonts)
@@ -56,6 +68,13 @@
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkGcc;
+    };
+
+    firefox = {
+      enable = true;
+      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+        forceWayland = true;
+      };
     };
 
     fzf = {
@@ -195,6 +214,12 @@
           export XDG_SESSION_TYPE="wayland" # otherwise set to tty
           export QT_QPA_PLATFORM=wayland
           export GDK_BACKEND=wayland
+          export SDL_VIDEODRIVER=wayland
+          export QT_WAYLAND_DISABLE_WINDOWDECORATOIN="1"
+          export _JAVA_AWT_WM_NONREPARENTING=1
+          export MOZ_ENABLE_WAYLAND=1
+          export CLUTTER_BACKEND=wayland
+          export XDG_CURRENT_DESKTOP=sway
           exec sway
         fi
 
@@ -240,14 +265,15 @@
         adjustment-method = "wayland";
         brightness-day = 0.9;
         brightness-night = 1.0;
+        gamma = "0.85:0.8:0.75";
       };
       randr = {
         screen = 0;
       };
     };
     temperature = {
-      day = 4100;
-      night = 3000;
+      day = 3300;
+      night = 3200;
     };
   };
 
