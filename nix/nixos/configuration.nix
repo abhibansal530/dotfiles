@@ -122,6 +122,19 @@
     #sway-borders-git
   ];
 
+
+  # Systemd services.
+  systemd.user.services.maestral = {
+    description = "Maestral daemon";
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.maestral.out}/bin/maestral start -f";
+      ExecStop = "${pkgs.maestral.out}/bin/maestral stop";
+      Restart = "on-failure";
+      Nice = 10;
+    };
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -174,10 +187,6 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-  networking.firewall = {
-    allowedTCPPorts = [ 17500 ];
-    allowedUDPPorts = [ 17500 ];
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
