@@ -40,7 +40,32 @@ rec {
     };
   };
 
-  menu = "${pkgs.wofi}/bin/wofi --show=run --hide-scroll | xargs swaymsg exec --";
+  #menu = "${pkgs.wofi}/bin/wofi --show=run --hide-scroll | xargs swaymsg exec --";
+  menu = "rofi -modi drun -show drun -matching fuzzy";
+
+  fonts = {
+    names = [ "SauceCodePro Nerd Font" ];
+    style = "Regular";
+  };
+
+  output = {
+    "*".bg = ''/home/abhi/Pictures/WallPapers/wallpaper.png fill'';
+    "HDMI-A-1" = {
+      mode = "1920x1080@144.013Hz";
+      scale = "1.1";
+      subpixel = "rgb";
+      adaptive_sync = "on";
+    };
+  };
+
+  assigns = {
+    "1" = [{ app_id = "firefox"; }];
+    "5" = [{ app_id = "emacs"; }];
+  };
+
+  startup = [
+    { command = "${pkgs.mako}/bin/mako"; }
+  ];
 
   keybindings = 
     let
@@ -89,6 +114,13 @@ rec {
       "${mod}+b" = "split h";
       "${mod}+v" = "split v";
 
+      # Lock screen.
+      "${mod}+z" = ''exec ${pkgs.swaylock}/bin/swaylock -i :/home/abhi/Pictures/WallPapers/lock.png'';
+
+      # Dismiss mako notifications.
+      "${mod}+x" = "exec ${pkgs.mako}/bin/makoctl dismiss";
+      "${mod}+Shift+x" = "exec ${pkgs.mako}/bin/makoctl dismiss -a";
+
       # Workspaces
       "${mod}+1" = "workspace number 1";      
       "${mod}+2" = "workspace number 2";
@@ -100,6 +132,7 @@ rec {
       "${mod}+8" = "workspace number 8";
       "${mod}+9" = "workspace number 9";
       "${mod}+0" = "workspace number 10";
+      "${mod}+Tab" = "workspace back_and_forth";
 
       "${mod}+Shift+1" = "move container to workspace number 1";
       "${mod}+Shift+2" = "move container to workspace number 2";
@@ -135,6 +168,10 @@ rec {
         "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5%";
       "XF86AudioLowerVolume" =
         "exec ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5%";
+
+      # Commands to open/switch to the app.
+      "${mod}+e" = "exec sway-focus-or-open emacs emacs";
+      "${mod}+F1" = "exec sway-focus-or-open firefox firefox";
 
       # TODO : Screenshot.
     };

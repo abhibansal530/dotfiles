@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 
+let
+  sway-focus-or-open = import ./config/sway/scripts/focus_or_open.nix { inherit pkgs; };
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -57,6 +60,9 @@
     (pkgs.sqlite) # For org-roam
     (pkgs.nur.repos.kira-bruneau.rofi-wayland)
     (pkgs.keepassxc)
+
+    # Custom scripts
+    sway-focus-or-open
   ];
 
   programs = {
@@ -113,7 +119,8 @@
         sidebar-mode = true;
         combi-mode = "drun,run";
       };
-      theme = import ./config/rofi/theme.nix { inherit config; };
+      theme = "${pkgs.nur.repos.kira-bruneau.rofi-wayland}/share/rofi/themes/Arc-Dark";
+      #theme = import ./config/rofi/theme.nix { inherit config; };
       #extraConfig = import ./config/rofi/rofi.nix;
     };
 
