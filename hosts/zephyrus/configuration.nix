@@ -66,6 +66,7 @@
     alacritty
     brightnessctl
     coreutils
+    gnumake
     vim
     wget
     maestral # Dropbox client
