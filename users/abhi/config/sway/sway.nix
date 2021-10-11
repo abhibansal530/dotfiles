@@ -1,4 +1,4 @@
-{ pkgs }:
+{ config, pkgs }:
 
 #let
 #  colorscheme = import ./colors.nix;
@@ -40,7 +40,6 @@ rec {
     };
   };
 
-  #menu = "${pkgs.wofi}/bin/wofi --show=run --hide-scroll | xargs swaymsg exec --";
   menu = "rofi -modi drun -show drun -matching fuzzy";
 
   fonts = {
@@ -65,6 +64,20 @@ rec {
 
   startup = [
     { command = "${pkgs.mako}/bin/mako"; }
+    { command = "${config.programs.firefox.package}/bin/firefox"; }
+    { command = "${config.programs.emacs.package}/bin/emacs"; }
+    {
+      command =
+        let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :/home/abhi/Pictures/WallPapers/lock.png";
+        in
+        ''
+        ${pkgs.swayidle}/bin/swayidle -w \
+        timeout 300 '${lockCmd}' \
+        timeout 500 'swaymsg "output * dpms off"' \
+        resume 'swaymsg "output * dpms on"' \
+        before-sleep '${lockCmd}'
+        '';
+    }
   ];
 
   keybindings = 
@@ -104,6 +117,7 @@ rec {
 
       "${mod}+Shift+c" = "reload";
       "${mod}+Shift+r" = "restart";
+      "${mod}+Shift+p" = ''mode "system:  [r]eboot  [p]oweroff  [l]ogout"'';
       "${mod}+Shift+e" = "exec swaynag -t warning -m 'Do you really want to exit sway?' -b 'Yes, exit way' 'swaymsg exit'";
 
       "${mod}+r" = "mode resize";
@@ -177,6 +191,14 @@ rec {
     };
 
   modes = {
+    "system:  [r]eboot  [p]oweroff  [l]ogout" = {
+      r = "exec reboot";
+      p = "exec poweroff";
+      l = "exit";
+      Return = "mode default";
+      Escape = "mode default";
+    };
+
     resize = {
       Left = "resize shrink width 10 px or 10 ppt";
       Down = "resize grow height 10 px or 10 ppt";

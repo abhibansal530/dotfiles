@@ -114,7 +114,7 @@ in
         layer = "bottom";
         position = "bottom";
         height = 15;
-        modules-left = [ "sway/workspaces" ];
+        modules-left = [ "sway/workspaces" "sway/mode" ];
         modules-right = [ "network" "pulseaudio" "battery" "clock" ];
         modules = import ./config/waybar/modules.nix { inherit config pkgs; };
       }];
@@ -242,7 +242,7 @@ in
 
   wayland.windowManager.sway = {
     enable = true;
-    config = import ./config/sway/sway.nix { inherit pkgs; };
+    config = import ./config/sway/sway.nix { inherit config pkgs; };
     extraConfig = import ./config/sway/sway_extra.nix { inherit pkgs; };
   };
 
