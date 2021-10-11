@@ -116,7 +116,7 @@ in
         height = 15;
         modules-left = [ "sway/workspaces" ];
         modules-right = [ "network" "pulseaudio" "battery" "clock" ];
-        modules = import ./config/waybar/modules.nix;
+        modules = import ./config/waybar/modules.nix { inherit config pkgs; };
       }];
 
       style = import ./config/waybar/style.nix;

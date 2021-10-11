@@ -1,3 +1,5 @@
+{ config, pkgs }:
+
 {
   "sway/workspaces" = {
     all-outputs = true;
@@ -17,6 +19,10 @@
     };
   };
 
+  "sway/mode" = {
+    format = "{}";
+  };
+
   "clock" = {
     format = " {:%H:%M}";
     tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
@@ -25,23 +31,26 @@
 
   "battery" = {
     states = {
+      good = 95;
       warning = 30;
       critical = 15;
     };
 
-    format = "{icon}  {capacity}%";
-    format-charging = "{icon}  {capacity}%";
-    format-plugged = "{icon}  {capacity}%";
-    format-full = "{icon}  {capacity}%";
-    format-icons = [ "" "" "" "" "" ];
+    format = "{icon} {capacity}%";
+    format-charging = " {capacity}%";
+    format-plugged = "ﮣ {capacity}%";
+    format-full = "{icon} {capacity}%";
+    format-icons = [ "" "" "" "" "" "" "" "" "" "" "" ];
   };
 
   "network" = {
     format-wifi = "  {essid}";
-    format-ethernet = "󰤮 Disconnected";
-    format-linked = "{ifname} (No IP) ";
-    format-disconnected = "󰤮 Disconnected";
-    tooltip-format-wifi = "Signal Strenght: {signalStrength}% | Down Speed: {bandwidthDownBits}, Up Speed: {bandwidthUpBits}";
+    format-ethernet = "  {ifname}: {ipaddr}/{cidr}";
+    format-linked = "  {ifname} (No IP)";
+    format-disconnected = "⚠ Disconnected";
+    format-alt = "{ifname}: {ipaddr}/{cidr}";
+    tooltip-format-wifi = "Signal Strength: {signalStrength}% | Down Speed: {bandwidthDownBits}, Up Speed: {bandwidthUpBits}";
+    on-click-right = "${config.programs.alacritty.package}/bin/alacritty -e ${pkgs.networkmanager}/bin/nmtui";
   };
 
   "pulseaudio" = {
