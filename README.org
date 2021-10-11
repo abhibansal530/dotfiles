@@ -9,3 +9,11 @@
    mv ~/.doom.d ~/.doom.d.old
    ln -sf /path/to/dotfiles/non-nix/doom.d ~/.doom.d
    #+END_EXAMPLE
+* Useful commands
+** GC old generations
+1. sudo nix-collect-garbage -d
+2. sudo nixos-rebuild boot --flake .#
+* Ref
+- https://github.com/fortuneteller2k/nix-config
+- https://git.sbruder.de/simon/nixos-config
+- https://jdisaacs.com/blog/nixos-config
