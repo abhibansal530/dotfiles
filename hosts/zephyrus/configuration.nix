@@ -95,7 +95,10 @@
       swayidle
       waybar
       wl-clipboard
-      qt5.qtwayland
+      qt5.qtwayland # Wayland support in Qt
+      grim # Grab images from wayland compositor
+      slurp # Select a region in wayland compositor
+      sway-contrib.grimshot # Helper for screenshots in sway
     ];
 
     extraSessionCommands = ''

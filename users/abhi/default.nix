@@ -16,7 +16,6 @@ in
       (pkgs.clang)
       (pkgs.fd)
       (pkgs.sqlite) # For org-roam
-      (pkgs.nur.repos.kira-bruneau.rofi-wayland)
       (pkgs.keepassxc)
 
       # Custom scripts

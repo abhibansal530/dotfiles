@@ -171,8 +171,9 @@ rec {
       "${mod}+minus" = "scratchpad show";
 
       # Brightness.
-      "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q set +5%";
-      "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q set 5%-";
+      # Ref. : https://www.reddit.com/r/swaywm/comments/fk08lu/nicer_brightness_control/
+      "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q set $(${pkgs.brightnessctl}/bin/brightnessctl get | awk '{ print $1 * 1.4 }')";
+      "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl -q set $(${pkgs.brightnessctl}/bin/brightnessctl get | awk '{ print $1 / 1.4 }')";
       "XF86KbdBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl --device='asus::kbd_backlight' set 3";
       "XF86KbdBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl --device='asus::kbd_backlight' set 0";
 
