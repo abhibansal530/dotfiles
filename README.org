@@ -1,0 +1,11 @@
+#+TITLE: README
+
+* Manual steps
+** Install Doom
+1. Follow official steps for installation
+2. Replace doom emacs config
+
+   #+BEGIN_EXAMPLE
+   mv ~/.doom.d ~/.doom.d.old
+   ln -sf /path/to/dotfiles/non-nix/doom.d ~/.doom.d
+   #+END_EXAMPLE

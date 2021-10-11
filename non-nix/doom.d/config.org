@@ -16,11 +16,11 @@ clients, file templates and snippets.
 * Theme and look
 ** Font
 #+BEGIN_SRC emacs-lisp
-(setq doom-font (font-spec :family "Meslo LG S for Powerline" :size 18))
+(setq doom-font (font-spec :family "Meslo LG S for Powerline" :size 16))
 #+END_SRC
 ** Theme
 #+BEGIN_SRC emacs-lisp
-(setq doom-theme 'gruvbox-dark-soft)
+(setq doom-theme 'doom-gruvbox)
 #+END_SRC
 ** Misc
 This determines the style of line numbers in effect. If set to `nil', line
