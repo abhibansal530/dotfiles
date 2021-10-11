@@ -1,76 +1,60 @@
-{ config, pkgs, ... }:
-
+{ config, inputs, lib, pkgs, ... }:
 let
   sway-focus-or-open = import ./config/sway/scripts/focus_or_open.nix { inherit pkgs; };
 in
 {
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-
-  # Home Manager needs a bit of information about you and the
-  # paths it should manage.
-  home.username = "abhi";
-  home.homeDirectory = "/home/abhi";
-
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "21.05";
-
   fonts.fontconfig.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    (import (builtins.fetchGit {
-      url = "https://github.com/nix-community/emacs-overlay.git";
-      ref = "master";
-      rev = "5fa26165cf34adbe693b159093ea15f24f7f7ea4"; # change the revision
-    }))
-  ];
+  home = {
+    username = "abhi";
+    homeDirectory = "/home/abhi";
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
+    sessionVariables = {
+      XDG_SESSION_TYPE = "wayland";
+      QT_QPA_PLATFORM = "wayland";
+      GDK_BACKEND = "wayland";
+      SDL_VIDEODRIVER = "wayland";
+      QT_WAYLAND_DISABLE_WINDOWDECORATOIN = 1;
+      _JAVA_AWT_WM_NONREPARENTING = 1;
+      MOZ_ENABLE_WAYLAND = 1;
+      CLUTTER_BACKEND = "wayland";
+      XDG_CURRENT_DESKTOP = "sway";
     };
+
+    packages = [
+      (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
+      (pkgs.powerline-fonts)
+      (pkgs.ripgrep)
+      (pkgs.clang)
+      (pkgs.fd)
+      (pkgs.sqlite) # For org-roam
+      (pkgs.nur.repos.kira-bruneau.rofi-wayland)
+      (pkgs.keepassxc)
+
+      # Custom scripts
+      sway-focus-or-open
+    ];
+
+    # This value determines the Home Manager release that your
+    # configuration is compatible with. This helps avoid breakage
+    # when a new Home Manager release introduces backwards
+    # incompatible changes.
+    #
+    # You can update Home Manager without changing this value. See
+    # the Home Manager release notes for a list of state version
+    # changes in each release.
+    stateVersion = "21.05";
   };
-
-  home.sessionVariables = {
-    XDG_SESSION_TYPE = "wayland";
-    QT_QPA_PLATFORM = "wayland";
-    GDK_BACKEND = "wayland";
-    SDL_VIDEODRIVER = "wayland";
-    QT_WAYLAND_DISABLE_WINDOWDECORATOIN = 1;
-    _JAVA_AWT_WM_NONREPARENTING = 1;
-    MOZ_ENABLE_WAYLAND = 1;
-    CLUTTER_BACKEND = "wayland";
-    XDG_CURRENT_DESKTOP = "sway";
-  };
-
-  home.packages = [
-    (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
-    (pkgs.powerline-fonts)
-    (pkgs.ripgrep)
-    (pkgs.clang)
-    (pkgs.fd)
-    (pkgs.sqlite) # For org-roam
-    (pkgs.nur.repos.kira-bruneau.rofi-wayland)
-    (pkgs.keepassxc)
-
-    # Custom scripts
-    sway-focus-or-open
-  ];
 
   programs = {
+    # Let Home Manager install and manage itself.
+    home-manager.enable = true;
+
     alacritty = {
       enable = true;
       settings = import ./config/alacritty.nix;
     };
-    
+
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkGcc;
@@ -169,25 +153,25 @@ in
         set wildignore+=*.o,*.obj,.git,*.rbc,*.class,.svn,vendor/gems/*,*.pyc,node_modules/*
         set wildmenu
         set ttyfast
-        
+
         colorscheme gruvbox
         set background=dark
-        
+
         " Gruvbox has 'hard', 'medium' (default) and 'soft' contrast options.
         let g:gruvbox_contrast_light='hard'
-        
+
         " This needs to come last, otherwise the colors aren't correct.
         syntax on
-        
+
         " Key Mappings
-        
+
         " Avoid a shift press.
         nnoremap ; :
         vnoremap ; :
-        
+
         " Escape is far.
         inoremap jk <ESC>
-        
+
         " Seamlessly treat visual lines as actual lines when moving around.
         noremap j gj
         noremap k gk
@@ -195,13 +179,13 @@ in
         noremap <Up> gk
         inoremap <Down> <C-o>gj
         inoremap <Up> <C-o>gk
-        
+
         " Use tab and shift-tab to cycle through windows.
         nnoremap <Tab> <C-W>w
         nnoremap <S-Tab> <C-W>W
-        
+
         let mapleader = ","
-        
+
         " Clear search highlights.
         nnoremap <silent> <leader><Space> :nohlsearch<cr><C-L>
       '';
@@ -232,17 +216,17 @@ in
 
         export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
         ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=25
-        
+
         export EDITOR='vim'
 
         # Use Rg for file searcing in fzf
         export FZF_DEFAULT_COMMAND="${pkgs.ripgrep}/bin/rg --files --hidden --follow"
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-        
+
         # Key bindings
         bindkey '^ ' autosuggest-accept
       '';
-      
+
       oh-my-zsh = {
         enable = true;
         plugins = [
