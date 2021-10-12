@@ -71,6 +71,7 @@
     wget
     maestral # Dropbox client
     pulseaudio
+    xfce.thunar # Graphical file manager
   ];
 
 
@@ -91,6 +92,7 @@
     wrapperFeatures.gtk = true;
     extraPackages = with pkgs; [
       brightnessctl
+      imv # CLI image viewer
       swaylock
       swayidle
       waybar
@@ -99,7 +101,7 @@
       grim # Grab images from wayland compositor
       slurp # Select a region in wayland compositor
       sway-contrib.grimshot # Helper for screenshots in sway
-      xfce.thunar # Graphical file manager
+      swappy # Wayland native snapshot editing tool.
     ];
 
     extraSessionCommands = ''
