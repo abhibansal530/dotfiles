@@ -99,6 +99,7 @@
       grim # Grab images from wayland compositor
       slurp # Select a region in wayland compositor
       sway-contrib.grimshot # Helper for screenshots in sway
+      xfce.thunar # Graphical file manager
     ];
 
     extraSessionCommands = ''
