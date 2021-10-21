@@ -17,6 +17,8 @@ in
       (pkgs.fd)
       (pkgs.sqlite) # For org-roam
       (pkgs.keepassxc)
+      pkgs.pdftk
+      pkgs.unzip
 
       # Custom scripts
       sway-focus-or-open
