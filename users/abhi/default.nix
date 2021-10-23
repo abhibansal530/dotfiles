@@ -22,6 +22,7 @@ in
       pkgs.nmap
 
       # Misc utils
+      pkgs.calibre
       pkgs.pdftk # For pdf operations
       pkgs.unzip
 
