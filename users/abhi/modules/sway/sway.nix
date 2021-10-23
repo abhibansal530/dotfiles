@@ -60,6 +60,7 @@ rec {
   assigns = {
     "1" = [{ app_id = "firefox"; }];
     "5" = [{ app_id = "emacs"; }];
+    "10" = [{ app_id = "org.keepassxc.KeePassXC"; }];
   };
 
   startup = [
@@ -187,6 +188,7 @@ rec {
       # Commands to open/switch to the app.
       "${mod}+e" = "exec sway-focus-or-open emacs emacs";
       "${mod}+F1" = "exec sway-focus-or-open firefox firefox";
+      "${mod}+p" = "exec sway-focus-or-open org.keepassxc.KeePassXC keepassxc";
 
       # TODO : Screenshot.
     };
