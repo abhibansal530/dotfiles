@@ -17,7 +17,12 @@ in
       (pkgs.fd)
       (pkgs.sqlite) # For org-roam
       (pkgs.keepassxc)
-      pkgs.pdftk
+
+      # Network utils
+      pkgs.nmap
+
+      # Misc utils
+      pkgs.pdftk # For pdf operations
       pkgs.unzip
 
       # Custom scripts
