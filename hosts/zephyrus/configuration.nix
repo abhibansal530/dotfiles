@@ -71,6 +71,7 @@
     wget
     maestral # Dropbox client
     pulseaudio
+    python39
     xfce.thunar # Graphical file manager
   ];
 
