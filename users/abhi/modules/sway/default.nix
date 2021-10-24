@@ -5,6 +5,7 @@
     ./gammastep.nix
     ./mako.nix
     ./waybar.nix
+    ./workstyle.nix
   ];
 
   wayland.windowManager.sway = {
