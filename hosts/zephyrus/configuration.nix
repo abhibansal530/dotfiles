@@ -103,7 +103,6 @@
       slurp # Select a region in wayland compositor
       sway-contrib.grimshot # Helper for screenshots in sway
       swappy # Wayland native snapshot editing tool.
-      unstable.workstyle # Dynamically rename workspaces
     ];
 
     extraSessionCommands = ''
