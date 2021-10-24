@@ -11,16 +11,51 @@
 
     emacs.url = "github:nix-community/emacs-overlay";
     nur.url = "github:nix-community/NUR";
+
+    # Nixpkgs branches
+    master.url = "github:nixos/nixpkgs/master";
+    stable.url = "github:nixos/nixpkgs/nixos-21.05";
+    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
   outputs = { self, nixpkgs, home-manager, ...} @ inputs:
+  with nixpkgs.lib;
   let
     system = "x86_64-linux";
+
+    filterNixFiles = k: v: v == "regular" && hasSuffix ".nix" k;
+
+    importNixFiles = path: (lists.forEach (mapAttrsToList (name: _: path + ("/" + name))
+      (filterAttrs filterNixFiles (builtins.readDir path)))) import;
+
     overlays = with inputs; [
-      # Overlays provided by inputs
+      (final: _:
+        let
+          config = {
+            allowUnfree = true;
+          };
+          system = final.system;
+        in
+        {
+          /*
+            Nixpkgs branches
+
+            One can access these branches like so:
+
+            `pkgs.stable.mpd'
+            `pkgs.master.linuxPackages_xanmod'
+          */
+          master = import master { inherit config system; };
+          unstable = import unstable { inherit config system; };
+          stable = import stable { inherit config system; };
+        })
+
+      # Overlays provided by inputs.
       emacs.overlay
       nur.overlay
-    ];
+    ]
+    # Overlays from ./overlays directory.
+    ++ (importNixFiles ./overlays);
   in
   {
     nixosConfigurations.zephyrus = import ./hosts/zephyrus {

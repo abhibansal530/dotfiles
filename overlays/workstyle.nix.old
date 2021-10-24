@@ -1,0 +1,11 @@
+final: prev: {
+  workstyle = prev.workstyle.overrideAttrs (old: {
+    src = prev.fetchFromGitHub {
+      owner = "pierrechevalier83";
+      repo = old.pname;
+      rev = "f2023750d802259ab3ee7d7d1762631ec157a0b1";
+      sha256 = "04xds691sw4pi2nq8xvdhn0312wwia60gkd8b1bjqy11zrqbivbx";
+    };
+    cargoSha256 = "0000000000000000000000000000000000000000000000000000";
+  });
+}
