@@ -12,21 +12,9 @@
       modules-right = [ "network" "pulseaudio" "battery" "clock" ];
       modules = {
         "sway/workspaces" = {
+          format = "{}";
           all-outputs = true;
           disable-scroll = true;
-
-          persistent_workspaces = {
-            "1" = [ ];
-            "2" = [ ];
-            "3" = [ ];
-            "4" = [ ];
-            "5" = [ ];
-            "6" = [ ];
-            "7" = [ ];
-            "8" = [ ];
-            "9" = [ ];
-            "10" = [ ];
-          };
         };
 
         "sway/mode" = {
