@@ -5,7 +5,10 @@ let
 
   # Mapping between application name and its icon.
   workstyle-cfg = {
-    "Alacritty" = "";
+    # As alacritty starts zsh, so using its prompt as app name.
+    "abhi@zephyrus" = "";
+    "alacritty" = "";
+    "emacs" = "Emacs";
     "termite" = "";
     "github" = "";
     "rust" = "";
@@ -14,6 +17,7 @@ let
     "firefox" = "";
     "chrome" = "";
     "file manager" = "";
+    "thunar" = "";
     "libreoffice calc" = "";
     "libreoffice writer" = "";
     "libreoffice" = "";
