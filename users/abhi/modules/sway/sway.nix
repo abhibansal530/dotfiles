@@ -67,7 +67,7 @@ rec {
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${config.programs.firefox.package}/bin/firefox"; }
     { command = "${config.programs.emacs.package}/bin/emacs"; }
-    { command = "${pkgs.unstable.workstyle}/bin/workstyle"; }
+    { command = "${pkgs.unstable.workstyle}/bin/workstyle"; always = true; }
     {
       command =
         let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :/home/abhi/Pictures/WallPapers/lock.png";
