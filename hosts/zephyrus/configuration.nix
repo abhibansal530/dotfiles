@@ -97,6 +97,7 @@
       swaylock
       swayidle
       waybar
+      clipman # Wayland clipboard manager
       wl-clipboard
       qt5.qtwayland # Wayland support in Qt
       grim # Grab images from wayland compositor

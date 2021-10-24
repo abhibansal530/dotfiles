@@ -67,6 +67,8 @@ rec {
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${config.programs.firefox.package}/bin/firefox"; }
     { command = "${config.programs.emacs.package}/bin/emacs"; }
+    # Store clipboard entries in clipman (to query with rofi later).
+    { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch ${pkgs.clipman}/bin/clipman store"; }
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }
     {
       command =
@@ -190,6 +192,9 @@ rec {
       "${mod}+e" = "exec sway-focus-or-open emacs emacs";
       "${mod}+F1" = "exec sway-focus-or-open firefox firefox";
       "${mod}+p" = "exec sway-focus-or-open org.keepassxc.KeePassXC keepassxc";
+
+      # Select a clipboard entry using rofi.
+      "${mod}+Space" = "exec ${pkgs.clipman}/bin/clipman pick -t rofi";
 
       # TODO : Screenshot.
     };
