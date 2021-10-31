@@ -74,6 +74,12 @@
     pulseaudio
     python39
     xfce.thunar # Graphical file manager
+
+    ## Languages
+    # cpp
+    bear
+    clang-tools
+    gcc
   ];
 
 
