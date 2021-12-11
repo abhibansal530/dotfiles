@@ -80,6 +80,10 @@
     bear
     clang-tools
     gcc
+
+    # go
+    go
+    gopls
   ];
 
 
