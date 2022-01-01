@@ -53,6 +53,10 @@ in
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
 
+    brave = {
+      enable = true;
+    };
+
     emacs = {
       enable = true;
       package = pkgs.emacsPgtkGcc;
