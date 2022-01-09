@@ -74,6 +74,7 @@
     pulseaudio
     python39
     xfce.thunar # Graphical file manager
+    zoom-us
 
     ## Languages
     # cpp
