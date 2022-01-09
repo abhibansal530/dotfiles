@@ -1,5 +1,8 @@
 nixos:
-	sudo nixos-rebuild switch --flake .#
+	sudo nixos-rebuild switch --flake .#$HOST
+
+thinkpad:
+	sudo nixos-rebuild switch --flake .#thinkpad
 
 freeupboot:
 	# Delete all but the last few generations

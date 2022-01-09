@@ -61,5 +61,9 @@
     nixosConfigurations.zephyrus = import ./hosts/zephyrus {
       inherit home-manager inputs nixpkgs overlays;
     };
+
+    nixosConfigurations.thinkpad = import ./hosts/thinkpad {
+      inherit home-manager inputs nixpkgs overlays;
+    };
   };
 }

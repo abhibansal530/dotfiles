@@ -1,15 +1,11 @@
 { config, inputs, lib, pkgs, ... }:
-let
-  my-clipman = import ./modules/sway/scripts/my_clipman.nix { inherit pkgs; };
-  sway-focus-or-open = import ./modules/sway/scripts/focus_or_open.nix { inherit pkgs; };
-  sway-auto-rename = import ./modules/sway/scripts/auto_rename.nix { inherit pkgs; };
-in
-{
+
+rec {
   fonts.fontconfig.enable = true;
 
   home = {
-    username = "abhi";
-    homeDirectory = "/home/abhi";
+    username = "abhishek";
+    homeDirectory = "/home/abhishek";
 
     packages = [
       (pkgs.nerdfonts.override { fonts = [ "Iosevka" "SourceCodePro" ]; })
@@ -24,14 +20,10 @@ in
       pkgs.nmap
 
       # Misc utils
-      pkgs.calibre
       pkgs.pdftk # For pdf operations
       pkgs.unzip
 
       # Custom scripts
-      my-clipman
-      sway-focus-or-open
-      sway-auto-rename
     ];
 
     # This value determines the Home Manager release that your
@@ -46,7 +38,13 @@ in
   };
 
   # Import per program config.
-  imports = [ ../../modules ];
+  imports = [
+    ../../modules/alacritty.nix
+    ../../modules/git.nix
+    ../../modules/gtk.nix
+    ../../modules/vim.nix
+    ../../modules/zsh.nix
+  ];
 
   # Programs without much custom configuration.
   programs = {
@@ -58,15 +56,12 @@ in
     };
 
     emacs = {
-      enable = true;
+      enable = false;
       package = pkgs.emacsPgtkGcc;
     };
 
     firefox = {
       enable = true;
-      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
-        forceWayland = true;
-      };
     };
 
     fzf = {
