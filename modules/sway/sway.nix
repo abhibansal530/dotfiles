@@ -49,7 +49,7 @@ rec {
 
   output = {
     "*" = { scale = "1.5"; };
-    #"*".bg = ''/home/abhi/Pictures/WallPapers/wallpaper.png fill'';
+    "*".bg = ''~/Pictures/WallPapers/wallpaper.png fill'';
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
       scale = "1.1";
@@ -73,7 +73,7 @@ rec {
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }
     {
       command =
-        let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :/home/abhi/Pictures/WallPapers/lock.png";
+        let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :~/Pictures/WallPapers/lock.png";
         in
         ''
         ${pkgs.swayidle}/bin/swayidle -w \
@@ -134,7 +134,7 @@ rec {
       "${mod}+v" = "split v";
 
       # Lock screen.
-      "${mod}+z" = ''exec ${pkgs.swaylock}/bin/swaylock -i :/home/abhi/Pictures/WallPapers/lock.png'';
+      "${mod}+z" = ''exec ${pkgs.swaylock}/bin/swaylock -i :~/Pictures/WallPapers/lock.png'';
 
       # Dismiss mako notifications.
       "${mod}+x" = "exec ${pkgs.mako}/bin/makoctl dismiss";
