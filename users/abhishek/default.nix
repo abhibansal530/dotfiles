@@ -79,5 +79,44 @@ rec {
       enable = true;
       options.selection-clipboard = "clipboard";
     };
+
+    autorandr = {
+      enable = true;
+      profiles = {
+        "laptop" = {
+          fingerprint = {
+            "eDP-1" = "Thinkpad";
+          };
+          config = {
+            "eDP-1" = {
+              enable = true;
+              primary = true;
+              mode = "1920x1200";
+            };
+            "HDMI-1" = {
+              enable = false;
+            };
+          };
+        };
+
+        "laptop-dual" = {
+          fingerprint = {
+            "eDP-1" = "Thinkpad";
+            "HDMI-1" = "MSI";
+          };
+          config = {
+            "eDP-1" = {
+              enable = false;
+            };
+            "HDMI-1" = {
+              enable = true;
+              primary = true;
+              mode = "1920x1080";
+              rate = "144.00";
+            };
+          };
+        };
+      };
+    };
   };
 }

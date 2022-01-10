@@ -51,8 +51,7 @@
   services.xserver = {
     enable = true;
     desktopManager = {
-      #default = "xfce";
-      xterm.enable = true;
+      xterm.enable = false;
       xfce = {
         enable = true;
         noDesktop = true;
@@ -65,6 +64,7 @@
     windowManager.i3.enable = true;
     xrandrHeads = [
       { output = "eDP-1"; primary = true; monitorConfig = "DisplaySize 302 189"; }
+      { output = "HDMI-1"; primary = false; monitorConfig = "DisplaySize 527 296"; }
     ];
     #dpi = 160;
   };
@@ -108,12 +108,15 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    brightnessctl
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     gnumake
     pulseaudio
     wget
     firefox
     maestral # Dropbox client
+    slack
+    zoom-us
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
