@@ -57,7 +57,7 @@ rec {
     };
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
-      scale = "1.1";
+      scale = "1.3";
       subpixel = "rgb";
       adaptive_sync = "on";
     };
