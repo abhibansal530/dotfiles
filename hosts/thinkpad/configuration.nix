@@ -94,6 +94,9 @@ in
     zoom-us
 
     ## Languages
+    # Build
+    bazel_4
+
     # cpp
     bear
     clang-tools

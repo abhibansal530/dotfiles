@@ -72,7 +72,7 @@ rec {
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${pkgs.keepassxc}/bin/keepassxc"; }
     { command = "${config.programs.firefox.package}/bin/firefox"; }
-    #{ command = "${config.programs.emacs.package}/bin/emacs"; }
+    { command = "${config.programs.emacs.package}/bin/emacs"; }
     # Store clipboard entries in clipman (to query with rofi later).
     { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch my-clipman"; }
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }
