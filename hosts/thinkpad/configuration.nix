@@ -102,6 +102,9 @@ in
     # go
     go
     gopls
+
+    # python
+    python39
   ];
   
   # Systemd services.
