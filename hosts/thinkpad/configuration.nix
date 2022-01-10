@@ -88,7 +88,6 @@ in
     gnumake
     pulseaudio
     wget
-    firefox
     maestral # Dropbox client
     xfce.thunar # Graphical file manager
     slack
@@ -124,6 +123,17 @@ in
       export CLUTTER_BACKEND=wayland
       export XDG_CURRENT_DESKTOP=Unity
     '';
+  };
+
+  xdg = {
+    portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-gtk
+      ];
+      gtkUsePortal = true;
+    };
   };
 
   services.blueman.enable = true;
