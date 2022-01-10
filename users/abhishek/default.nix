@@ -62,6 +62,7 @@ in
 
     brave = {
       enable = true;
+      package = pkgs.master.brave;
     };
 
     emacs = {
