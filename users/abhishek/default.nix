@@ -44,6 +44,8 @@ rec {
     ../../modules/gtk.nix
     ../../modules/vim.nix
     ../../modules/zsh.nix
+    ../../modules/rofi.nix
+    ../../modules/sway
   ];
 
   # Programs without much custom configuration.

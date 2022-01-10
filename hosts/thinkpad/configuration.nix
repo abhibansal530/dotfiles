@@ -6,25 +6,30 @@
       ./hardware-configuration.nix
     ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot = {
+    kernelPackages = pkgs.linuxPackages_5_15;
+    loader = {
+      systemd-boot.consoleMode = "max";
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+  };
 
-  networking.hostName = "thinkpad"; # Define your hostname.
-  networking.networkmanager.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+    hostName = "thinkpad";
+    networkmanager = {
+      enable = true;
+    };
+
+    interfaces = {
+      wlp0s20f3.useDHCP = true;
+    };
+
+    useDHCP = false;
+  };
 
   # Set your time zone.
   time.timeZone = "Asia/Kolkata";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.wlp0s20f3.useDHCP = true;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -34,55 +39,10 @@
     earlySetup = true;
   };
 
-  location = {
-    latitude = 29.96;
-    longitude = 74.71;
-  };
-
-  services.redshift = {
-    enable = true;
-    temperature = {
-      day = 3300;
-      night = 3200;
-    };
-  };
-
-  # Enable the X11 windowing system.
-  services.xserver = {
-    enable = true;
-    desktopManager = {
-      xterm.enable = false;
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-      };
-    };
-    displayManager = {
-      defaultSession = "xfce+i3";
-    };
-    windowManager.i3.enable = true;
-    xrandrHeads = [
-      { output = "eDP-1"; primary = true; monitorConfig = "DisplaySize 302 189"; }
-      { output = "HDMI-1"; primary = false; monitorConfig = "DisplaySize 527 296"; }
-    ];
-    #dpi = 160;
-  };
-
-
-  
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
   # Enable sound.
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-  hardware.video.hidpi.enable = true;
+  #hardware.video.hidpi.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -109,34 +69,49 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     brightnessctl
+    coreutils
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     gnumake
     pulseaudio
     wget
     firefox
     maestral # Dropbox client
-    slack
-    zoom-us
+    #slack
+    xfce.thunar # Graphical file manager
+    #zoom-us
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+    extraPackages = with pkgs; [
+      brightnessctl
+      imv # CLI image viewer
+      swaylock
+      swayidle
+      waybar
+      clipman # Wayland clipboard manager
+      wl-clipboard
+      qt5.qtwayland # Wayland support in Qt
+      grim # Grab images from wayland compositor
+      slurp # Select a region in wayland compositor
+      sway-contrib.grimshot # Helper for screenshots in sway
+      swappy # Wayland native snapshot editing tool.
+    ];
 
-  # List services that you want to enable:
+    extraSessionCommands = ''
+      export SDL_VIDEODRIVER=wayland
+      export QT_QPA_PLATFORM=wayland
+      export QT_WAYLAND_DISABLE_WINDOWDECORATOIN="1"
+      export _JAVA_AWT_WM_NONREPARENTING=1
+      export MOZ_ENABLE_WAYLAND=1
+      export GDK_BACKEND=wayland
+      export CLUTTER_BACKEND=wayland
+      export XDG_CURRENT_DESKTOP=Unity
+    '';
+  };
 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  services.blueman.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

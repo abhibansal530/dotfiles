@@ -48,7 +48,8 @@ rec {
   };
 
   output = {
-    "*".bg = ''/home/abhi/Pictures/WallPapers/wallpaper.png fill'';
+    "*" = { scale = "1.5"; };
+    #"*".bg = ''/home/abhi/Pictures/WallPapers/wallpaper.png fill'';
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
       scale = "1.1";
@@ -66,7 +67,7 @@ rec {
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${pkgs.keepassxc}/bin/keepassxc"; }
     { command = "${config.programs.firefox.package}/bin/firefox"; }
-    { command = "${config.programs.emacs.package}/bin/emacs"; }
+    #{ command = "${config.programs.emacs.package}/bin/emacs"; }
     # Store clipboard entries in clipman (to query with rofi later).
     { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch my-clipman"; }
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }
