@@ -92,8 +92,29 @@ in
     xfce.thunar # Graphical file manager
     slack
     zoom-us
+
+    ## Languages
+    # cpp
+    bear
+    clang-tools
+    gcc
+
+    # go
+    go
+    gopls
   ];
   
+  # Systemd services.
+  systemd.user.services.maestral = {
+    description = "Maestral daemon";
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.maestral.out}/bin/maestral start -f";
+      ExecStop = "${pkgs.maestral.out}/bin/maestral stop";
+      Restart = "on-failure";
+      Nice = 10;
+    };
+  };
 
   programs.sway = {
     enable = true;
