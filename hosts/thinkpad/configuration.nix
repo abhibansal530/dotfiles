@@ -1,5 +1,18 @@
 { config, lib, pkgs, ... }:
 
+let
+  slack = pkgs.slack.overrideAttrs (old: {
+    installPhase = old.installPhase + ''
+      rm $out/bin/slack
+
+      makeWrapper $out/lib/slack/slack $out/bin/slack \
+        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+        --prefix PATH : ${lib.makeBinPath [pkgs.xdg-utils]} \
+        --add-flags "--ozone-platform=wayland --enable-features=UseOzonePlatform,WebRTCPipeWireCapturer"
+    '';
+  });
+
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -67,6 +80,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  
   environment.systemPackages = with pkgs; [
     brightnessctl
     coreutils
@@ -76,10 +90,11 @@
     wget
     firefox
     maestral # Dropbox client
-    #slack
     xfce.thunar # Graphical file manager
-    #zoom-us
+    slack
+    zoom-us
   ];
+  
 
   programs.sway = {
     enable = true;
