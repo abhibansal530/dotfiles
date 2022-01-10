@@ -58,7 +58,7 @@ rec {
     };
 
     emacs = {
-      enable = false;
+      enable = true;
       package = pkgs.emacsPgtkGcc;
     };
 
