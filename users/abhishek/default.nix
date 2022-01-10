@@ -60,9 +60,11 @@ in
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
 
-    brave = {
+    chromium = {
       enable = true;
-      package = pkgs.master.brave;
+      package = pkgs.ungoogled-chromium.override {
+        commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+      };
     };
 
     emacs = {
