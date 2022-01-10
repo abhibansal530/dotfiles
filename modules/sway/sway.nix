@@ -48,8 +48,13 @@ rec {
   };
 
   output = {
-    "*" = { scale = "1.5"; };
     "*".bg = ''~/Pictures/WallPapers/wallpaper.png fill'';
+    "eDP-1" = {
+      mode = "1920x1200@60.001Hz";
+      scale = "1.5";
+      subpixel = "rgb";
+      adaptive_sync = "on";
+    };
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
       scale = "1.1";
