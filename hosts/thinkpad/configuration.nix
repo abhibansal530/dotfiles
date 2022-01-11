@@ -120,14 +120,18 @@ in
   ];
   
   # Systemd services.
-  systemd.user.services.maestral = {
-    description = "Maestral daemon";
-    wantedBy = [ "default.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.maestral.out}/bin/maestral start -f";
-      ExecStop = "${pkgs.maestral.out}/bin/maestral stop";
-      Restart = "on-failure";
-      Nice = 10;
+  systemd.user.services = {
+    pipewire.wantedBy = [ "default.target" ];
+    pipewire-pulse.wantedBy = [ "default.target" ];
+    maestral = {
+      description = "Maestral daemon";
+      wantedBy = [ "default.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.maestral.out}/bin/maestral start -f";
+        ExecStop = "${pkgs.maestral.out}/bin/maestral stop";
+        Restart = "on-failure";
+        Nice = 10;
+      };
     };
   };
 
@@ -172,7 +176,14 @@ in
     };
   };
 
-  services.blueman.enable = true;
+  services = {
+    blueman = {
+      enable = true;
+    };
+    pipewire = {
+      enable = true;
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
