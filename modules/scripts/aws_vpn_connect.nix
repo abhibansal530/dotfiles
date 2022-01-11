@@ -71,6 +71,9 @@ in pkgs.writeShellApplication rec {
         --verb 3 --auth-nocache --inactive 3600 \
         --proto $PROTO --remote $SRV $PORT \
         --script-security 2 \
+        --up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved \
+        --down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved \
+        --up-restart --down-pre \
         --route-up '/usr/bin/env rm saml-response.txt' \
         --auth-user-pass <( printf \"%s\n%s\n\" \"N/A\" \"CRV1::''${VPN_SID}::$(cat saml-response.txt)\" )"
   '';
