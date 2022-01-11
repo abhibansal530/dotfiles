@@ -98,6 +98,10 @@ in
     openvpn
     update-systemd-resolved
 
+    # xdg-utils (for things like xdg-open)
+    # TODO : mimi doesn't work currently due to harcoded path (/usr/share/applications/ in its script).
+    # (pkgs.xdg-utils.override { mimiSupport = true; })
+
     ## Languages
     # Build
     bazel_4

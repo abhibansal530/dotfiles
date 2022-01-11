@@ -10,7 +10,7 @@ PORT="$2"
 OVPN_CONF="$3"
 
 # path to the patched openvpn
-OVPN_BIN="/run/current-system/sw/bin/openvpn"
+OVPN_BIN="${pkgs.openvpn}/bin/openvpn"
 # path to the configuration file
 PROTO=udp
 
@@ -22,10 +22,10 @@ wait_file() {
 }
 
 # create random hostname prefix for the vpn gw
-RAND=$(openssl rand -hex 12)
+RAND=$(${pkgs.openssl}/bin/openssl rand -hex 12)
 
 # resolv manually hostname to IP, as we have to keep persistent ip address
-SRV=$(dig a +short "''${RAND}.''${VPN_HOST}"|head -n1)
+SRV=$(${pkgs.dig}/bin/dig a +short "''${RAND}.''${VPN_HOST}"|head -n1)
 
 # cleanup
 rm -f saml-response.txt
@@ -44,7 +44,7 @@ URL=$(echo "$OVPN_OUT" | grep -Eo 'https://.+')
 
 unameOut="$(uname -s)"
 case "''${unameOut}" in
-    Linux*)     xdg-open "$URL";;
+    Linux*)     firefox "$URL";;
     Darwin*)    open "$URL";;
     *)          echo "Could not determine 'open' command for this OS"; exit 1;;
 esac
