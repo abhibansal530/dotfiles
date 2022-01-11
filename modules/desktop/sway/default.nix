@@ -7,6 +7,7 @@ let cfg = config._my.desktop.sway;
     my-clipman = import ./scripts/my_clipman.nix { inherit pkgs; };
     sway-focus-or-open = import ./scripts/focus_or_open.nix { inherit pkgs; };
     sway-auto-rename = import ./scripts/auto_rename.nix { inherit pkgs; };
+    sway-clamshell-helper = import ./scripts/sway_clamshell_helper.nix { inherit pkgs; };
     baseConfig = import ./config.nix { inherit config pkgs; };
 in
 {
@@ -110,6 +111,7 @@ in
         my-clipman
         sway-focus-or-open
         sway-auto-rename
+        sway-clamshell-helper
       ];
 
 
