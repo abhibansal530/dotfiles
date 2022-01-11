@@ -88,6 +88,7 @@ rec {
         before-sleep '${lockCmd}'
         '';
     }
+    { command = "sway-clamshell-helper" ; always = true; }
   ];
 
   keybindings = 
