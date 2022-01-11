@@ -35,6 +35,7 @@ in pkgs.writeShellApplication rec {
     rm -f saml-response.txt
     
     # start the saml response server and background it
+    sudo rm /tmp/server.go
     cp ${aws-vpn-helper-server} /tmp/server.go
     go run /tmp/server.go >> /tmp/aws-connect-saml-server.log 2>&1 &
     
