@@ -53,6 +53,7 @@ WINDOW_ICONS = {
     "virt-manager": "",
     "wofi": "",
     "org.pwmt.zathura": "",
+    ".blueman-manager-wrapped": "",
 }
 
 DEFAULT_ICON = "󰀏"
