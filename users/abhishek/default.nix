@@ -65,7 +65,7 @@ in
 
     chromium = {
       enable = true;
-      package = pkgs.ungoogled-chromium.override {
+      package = pkgs.chromium.override {
         commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
       };
     };
