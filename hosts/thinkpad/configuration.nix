@@ -93,6 +93,11 @@ in
     slack
     zoom-us
 
+    # From overlays
+    ## openvpn with aws patch
+    openvpn
+    update-systemd-resolved
+
     ## Languages
     # Build
     bazel_4
