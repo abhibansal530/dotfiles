@@ -3,6 +3,7 @@ let
   my-clipman = import ../../modules/sway/scripts/my_clipman.nix { inherit pkgs; };
   sway-focus-or-open = import ../../modules/sway/scripts/focus_or_open.nix { inherit pkgs; };
   sway-auto-rename = import ../../modules/sway/scripts/auto_rename.nix { inherit pkgs; };
+  aws-connect = import ../../modules/scripts/aws_vpn_connect.nix { inherit pkgs; };
 in
 {
   fonts.fontconfig.enable = true;
@@ -31,6 +32,7 @@ in
       my-clipman
       sway-focus-or-open
       sway-auto-rename
+      aws-connect
     ];
 
     # This value determines the Home Manager release that your
