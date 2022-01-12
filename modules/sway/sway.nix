@@ -67,6 +67,7 @@ rec {
     #"1" = [{ app_id = "firefox"; }];
     "1" = [{ app_id = "chromium-browser"; }];
     "5" = [{ app_id = "emacs"; }];
+    "10" = [{ app_id = "Slack"; }];
   };
 
   startup = [
@@ -74,6 +75,7 @@ rec {
     { command = "${pkgs.keepassxc}/bin/keepassxc"; }
     #{ command = "${config.programs.firefox.package}/bin/firefox"; }
     { command = "${config.programs.chromium.package}/bin/chromium"; }
+    { command = "slack"; }
     { command = "${config.programs.emacs.package}/bin/emacs"; }
     # Store clipboard entries in clipman (to query with rofi later).
     { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch my-clipman"; }
@@ -201,6 +203,7 @@ rec {
       "${mod}+e" = "exec sway-focus-or-open emacs emacs";
       #"${mod}+F1" = "exec sway-focus-or-open firefox firefox";
       "${mod}+F1" = "exec sway-focus-or-open chromium-browser chromium";
+      "${mod}+F2" = "exec sway-focus-or-open Slack slack";
       "${mod}+p" = "[app_id = \"org.keepassxc.KeePassXC\"] scratchpad show";
 
       # Select a clipboard entry using rofi.
