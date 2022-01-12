@@ -102,6 +102,9 @@ in
     # TODO : mimi doesn't work currently due to harcoded path (/usr/share/applications/ in its script).
     # (pkgs.xdg-utils.override { mimiSupport = true; })
 
+    # Dev
+    docker
+
     ## Languages
     # Build
     bazel_4
