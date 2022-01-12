@@ -67,6 +67,7 @@ in
     home = "/home/abhishek";
     extraGroups = [
       "audio"
+      "docker"
       "wheel" # Enable ‘sudo’ for the user.
       "networkmanager"
     ]; 
@@ -190,6 +191,9 @@ in
     };
     resolved.enable = true;
   };
+
+  # Enable docker service.
+  virtualisation.docker.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
