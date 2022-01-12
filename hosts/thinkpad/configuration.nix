@@ -121,6 +121,9 @@ in
     go
     gopls
 
+    # Java
+    jdk11_headless
+
     # python
     python39
   ];
