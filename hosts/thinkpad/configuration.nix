@@ -91,6 +91,7 @@ in
     maestral # Dropbox client
     xfce.thunar # Graphical file manager
     slack
+    spotify
     zoom-us
 
     # From overlays
