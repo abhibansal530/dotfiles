@@ -49,3 +49,5 @@
 (package! anki-editor)
 (package! protobuf-mode)
 (package! elfeed-goodies)
+(package! bazel
+  :recipe (:host github :repo "bazelbuild/emacs-bazel-mode"))
