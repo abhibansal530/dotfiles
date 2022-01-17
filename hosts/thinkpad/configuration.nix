@@ -90,6 +90,7 @@ in
     wget
     maestral # Dropbox client
     xfce.thunar # Graphical file manager
+    pandoc
     slack
     spotify
     zoom-us
