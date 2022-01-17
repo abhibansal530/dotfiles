@@ -11,10 +11,5 @@
     };
     userName = "Abhishek Bansal";
     userEmail = "abhibansal530@gmail.com";
-    extraConfig = {
-      url = {
-        "git@github.com:" = { insteadOf = "https://github.com/"; };
-      };
-    };
   };
 }
