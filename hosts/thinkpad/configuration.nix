@@ -81,11 +81,17 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   
+  #environment.variables = {
+  #  SSH_ASKPASS = "${pkgs.ssh-askpass-fullscreen}/bin/ssh-askpass-fullscreen";
+  #};
+
   environment.systemPackages = with pkgs; [
     brightnessctl
     coreutils
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     gnumake
+    keychain
+    ssh-askpass-fullscreen
     pulseaudio
     wget
     maestral # Dropbox client
