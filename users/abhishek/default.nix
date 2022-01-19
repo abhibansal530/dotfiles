@@ -99,6 +99,9 @@ in
 
     zathura = {
       enable = true;
+      package = pkgs.zathura.override {
+        useMupdf = true;
+      };
       options.selection-clipboard = "clipboard";
     };
 
