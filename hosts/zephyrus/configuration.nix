@@ -7,7 +7,7 @@
     ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_5_14;
+    kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       systemd-boot.consoleMode = "max";
       systemd-boot.enable = true;
