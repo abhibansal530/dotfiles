@@ -6,7 +6,7 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs"; # Use above version of nixpkgs
     };
 
     emacs.url = "github:nix-community/emacs-overlay";
@@ -22,7 +22,6 @@
   with nixpkgs.lib;
   let
     system = "x86_64-linux";
-
     filterNixFiles = k: v: v == "regular" && hasSuffix ".nix" k;
 
     importNixFiles = path: (lists.forEach (mapAttrsToList (name: _: path + ("/" + name))
@@ -56,10 +55,34 @@
     ]
     # Overlays from ./overlays directory.
     ++ (importNixFiles ./overlays);
+
+    # Customize nixpkgs to use.
+    myPkgs = import inputs.nixpkgs {
+      inherit system overlays;
+      config.allowUnfree = true;
+    };
+
+    myLib = import ./lib {
+      inherit inputs home-manager;
+      nixpkgs = myPkgs;
+    };
+
+    inherit (myLib) mkHomeConfig mkHost;
+
   in
   {
-    nixosConfigurations.zephyrus = import ./hosts/zephyrus {
-      inherit home-manager inputs nixpkgs overlays;
+    nixosConfigurations = {
+      zephyrus = mkHost {
+        inherit system;
+        hostName = "zephyrus";
+        hostUserName = "abhi";
+        hostConfig = import ./hosts/zephyrus/configuration.nix;
+      };
+
+      #thinkpad = mkHost {
+      #  inherit system;
+      #  hostConfig = {};
+      #};
     };
   };
 }
