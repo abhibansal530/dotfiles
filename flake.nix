@@ -52,9 +52,9 @@
       # Overlays provided by inputs.
       emacs.overlay
       nur.overlay
-    ]
+    ];
     # Overlays from ./overlays directory.
-    ++ (importNixFiles ./overlays);
+    # ++ (importNixFiles ./overlays);
 
     # Customize nixpkgs to use.
     myPkgs = import inputs.nixpkgs {
@@ -77,6 +77,7 @@
         hostName = "zephyrus";
         hostUserName = "abhi";
         hostConfig = import ./hosts/zephyrus/configuration.nix;
+        homeUserConfig = import ./hosts/zephyrus/home.nix;
       };
 
       #thinkpad = mkHost {

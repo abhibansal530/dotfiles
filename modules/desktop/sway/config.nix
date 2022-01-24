@@ -3,6 +3,11 @@
 #let
 #  colorscheme = import ./colors.nix;
 
+let
+  userName = config._my.user.name;
+  firefox = config.home-manager.users.${userName}.programs.firefox;
+  emacs = config.home-manager.users.${userName}.programs.emacs;
+in
 rec {
 
   # colors = {
@@ -65,8 +70,8 @@ rec {
   startup = [
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${pkgs.keepassxc}/bin/keepassxc"; }
-    { command = "${config.programs.firefox.package}/bin/firefox"; }
-    { command = "${config.programs.emacs.package}/bin/emacs"; }
+    { command = "${firefox.package}/bin/firefox"; }
+    { command = "${emacs.package}/bin/emacs"; }
     # Store clipboard entries in clipman (to query with rofi later).
     { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch my-clipman"; }
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }

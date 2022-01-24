@@ -11,8 +11,9 @@ with builtins;
   # hostName : Host name.
   # hostUserName : User name to configure for this host.
   # hostConfig : Host specific NixOS module for this host.
-  mkHost = {system, hostName, hostUserName, hostConfig}:
-    let commonModule = import ../common.nix {
+  mkHost = {system, hostName, hostUserName, hostConfig, homeUserConfig ? {}}:
+    with inputs.nixpkgs.lib;
+    let commonConfig = import ../common.nix {
           inherit inputs system nixpkgs hostName hostUserName;
         };
 
@@ -46,14 +47,11 @@ with builtins;
       # External modules used.
       home-manager.nixosModules.home-manager
 
-      # Any common config goes here.
-      commonModule
+      # NixOS common config goes here.
+      commonConfig
 
-      # Host specific config.
-      hostConfig
-
+      # Home manager module config.
       {
-        # Home manager module config.
         home-manager = {
           # Use system config's 'pkgs' argument in home manager.
           useGlobalPkgs = true;
@@ -62,10 +60,20 @@ with builtins;
           useUserPackages = true;
 
           # User config.
-          #users.abhi = import ../users/abhi;
-          users.${hostUserName} = import ../users/${hostUserName};
+          users.${hostUserName} = mkMerge [
+            {
+              home.username = hostUserName;
+              home.homeDirectory = "/home/${hostUserName}";
+            }
+
+            ../home.nix
+            homeUserConfig
+          ];
         };
       }
+
+      # Host specific config.
+      hostConfig
     ];
   };
 }

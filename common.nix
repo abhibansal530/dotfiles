@@ -9,6 +9,11 @@ let
           hostName != "" && hostUserName != "";
 in
 {
+  imports = [
+    # My modules.
+    ./modules
+  ];
+
   config = lib.mkAssert valid "Invalid config" {
     nix = {
       # Default Nix expression search path, used to lookup for paths in angle brackets (eg. <nixpkgs>).
@@ -95,6 +100,7 @@ in
       ## Languages
       # cpp
       bear
+      clang
       clang-tools
       gcc
 
@@ -114,36 +120,6 @@ in
         Restart = "on-failure";
         Nice = 10;
       };
-    };
-
-    programs.sway = {
-      enable = true;
-      wrapperFeatures.gtk = true;
-      extraPackages = with nixpkgs; [
-        brightnessctl
-        imv # CLI image viewer
-        swaylock
-        swayidle
-        waybar
-        clipman # Wayland clipboard manager
-        wl-clipboard
-        qt5.qtwayland # Wayland support in Qt
-        grim # Grab images from wayland compositor
-        slurp # Select a region in wayland compositor
-        sway-contrib.grimshot # Helper for screenshots in sway
-        swappy # Wayland native snapshot editing tool.
-      ];
-
-      extraSessionCommands = ''
-        export SDL_VIDEODRIVER=wayland
-        export QT_QPA_PLATFORM=wayland
-        export QT_WAYLAND_DISABLE_WINDOWDECORATOIN="1"
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        export MOZ_ENABLE_WAYLAND=1
-        export GDK_BACKEND=wayland
-        export CLUTTER_BACKEND=wayland
-        export XDG_CURRENT_DESKTOP=Unity
-      '';
     };
 
     services.blueman.enable = true;
@@ -191,5 +167,8 @@ in
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "21.11"; # Did you read the comment?
+
+    # Config from my modules.
+    _my.user.name = hostUserName;
   };
 }
