@@ -7,6 +7,7 @@ let cfg = config._my.desktop.sway;
     my-clipman = import ./scripts/my_clipman.nix { inherit pkgs; };
     sway-focus-or-open = import ./scripts/focus_or_open.nix { inherit pkgs; };
     sway-auto-rename = import ./scripts/auto_rename.nix { inherit pkgs; };
+    baseConfig = import ./config.nix { inherit config pkgs; };
 in
 {
   imports = [
@@ -17,6 +18,13 @@ in
       description = "Enable sway WM";
       type = types.bool;
       default = true;
+    };
+
+    extraConfig = mkOption {
+      description = "Extra sway WM config";
+      # TODO : See if there's any way to re-use submodule type defined by HM.
+      type = types.attrs;
+      default = {};
     };
   };
 
@@ -68,7 +76,10 @@ in
 
       wayland.windowManager.sway = {
         enable = true;
-        config = import ./config.nix { inherit config pkgs; };
+        config = mkMerge [
+          baseConfig
+          cfg.extraConfig
+        ];
         extraConfig = import ./extra.nix { inherit pkgs; };
       };
 

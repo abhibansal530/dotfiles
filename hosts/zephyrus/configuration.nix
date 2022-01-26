@@ -15,4 +15,9 @@
       wlp2s0.useDHCP = true;
     };
   };
+
+  # Config for my modules.
+  _my.default-browser = "firefox";
+  _my.desktop.sway.extraConfig = {
+  };
 }

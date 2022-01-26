@@ -9,6 +9,12 @@ with lib;
     ./editor
   ];
 
+  options._my.default-browser = mkOption {
+    description = "Default browser to use";
+    type = types.enum [ "firefox" "chromium" ];
+    default = "firefox";
+  };
+
   options._my.user = {
     name = mkOption {
       description = "User name";

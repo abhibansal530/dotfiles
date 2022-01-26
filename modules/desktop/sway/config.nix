@@ -5,7 +5,9 @@
 
 let
   userName = config._my.user.name;
-  firefox = config.home-manager.users.${userName}.programs.firefox;
+  browser = config._my.default-browser;
+  browserAppId =  (import ./app_ids.nix).${browser};
+  browserCfg = config.home-manager.users.${userName}.programs.${browser};
   emacs = config.home-manager.users.${userName}.programs.emacs;
 in
 rec {
@@ -63,14 +65,14 @@ rec {
   };
 
   assigns = {
-    "1" = [{ app_id = "firefox"; }];
+    "1" = [{ app_id = browserAppId; }];
     "5" = [{ app_id = "emacs"; }];
   };
 
   startup = [
     { command = "${pkgs.mako}/bin/mako"; }
     { command = "${pkgs.keepassxc}/bin/keepassxc"; }
-    { command = "${firefox.package}/bin/firefox"; }
+    { command = "${browserCfg.package}/bin/${browser}"; }
     { command = "${emacs.package}/bin/emacs"; }
     # Store clipboard entries in clipman (to query with rofi later).
     { command = "${pkgs.wl-clipboard}/bin/wl-paste -t text --watch my-clipman"; }
@@ -195,7 +197,7 @@ rec {
 
       # Commands to open/switch to the app.
       "${mod}+e" = "exec sway-focus-or-open emacs emacs";
-      "${mod}+F1" = "exec sway-focus-or-open firefox firefox";
+      "${mod}+F1" = "exec sway-focus-or-open ${browserAppId} ${browser}";
       "${mod}+p" = "[app_id = \"org.keepassxc.KeePassXC\"] scratchpad show";
 
       # Select a clipboard entry using rofi.
