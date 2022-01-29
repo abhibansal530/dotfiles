@@ -80,10 +80,13 @@
         homeUserConfig = import ./hosts/zephyrus/home.nix;
       };
 
-      #thinkpad = mkHost {
-      #  inherit system;
-      #  hostConfig = {};
-      #};
+      thinkpad = mkHost {
+        inherit system;
+        hostName = "thinkpad";
+        hostUserName = "abhishek";
+        hostConfig = import ./hosts/thinkpad/configuration.nix;
+        homeUserConfig = import ./hosts/thinkpad/home.nix;
+      };
     };
   };
 }
