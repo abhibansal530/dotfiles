@@ -111,6 +111,9 @@ in
       # go
       go
       gopls
+
+      # Misc
+      file
     ];
 
 

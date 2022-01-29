@@ -228,6 +228,9 @@ rec {
 
   floating.criteria = [
     { app_id = "org.keepassxc.KeePassXC"; }
+    { app_id = "zoom"; }
+    { app_id = "zoom"; title = "Choose ONE of the audio conference options"; }
+    { app_id = "zoom"; title = "zoom"; }
   ];
 
   window.commands = [
@@ -235,6 +238,21 @@ rec {
       command = "move to scratchpad";
       criteria = {
         app_id = "org.keepassxc.KeePassXC";
+      };
+    }
+
+    {
+      command = "floating disable";
+      criteria = {
+        app_id = "zoom";
+        title = "Zoom Meeting";
+      };
+    }
+    {
+      command = "floating disable";
+      criteria = {
+        app_id = "zoom";
+        title = "Zoom - Free Account";
       };
     }
   ];
