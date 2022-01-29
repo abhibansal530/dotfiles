@@ -80,6 +80,7 @@ in
         "wheel" # Enable ‘sudo’ for the user.
         "networkmanager"
         "audio"
+        "docker"
       ];
     };
 
@@ -96,6 +97,9 @@ in
       python39
       xfce.thunar # Graphical file manager
       zoom-us
+
+      # Dev
+      docker
 
       ## Languages
       # cpp
@@ -159,6 +163,9 @@ in
         }
       ];
     };
+
+    # Enable docker service.
+    virtualisation.docker.enable = true;
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
