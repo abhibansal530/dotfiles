@@ -129,42 +129,58 @@ in
       };
     };
 
-    services.blueman.enable = true;
+    xdg = {
+      portal = {
+        enable = true;
+        extraPortals = with nixpkgs; [
+          xdg-desktop-portal-wlr
+          xdg-desktop-portal-gtk
+        ];
+        gtkUsePortal = true;
+      };
+    };
 
-    # Pipewire config (taken from NixOS wiki).
+
+    # Required for pipewire.
     security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
 
-      media-session.config.bluez-monitor.rules = [
-        {
-          # Matches all cards
-          matches = [ { "device.name" = "~bluez_card.*"; } ];
-          actions = {
-            "update-props" = {
-              "bluez5.reconnect-profiles" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
-              # mSBC is not expected to work on all headset + adapter combinations.
-              "bluez5.msbc-support" = true;
-              # SBC-XQ is not expected to work on all headset + adapter combinations.
-              "bluez5.sbc-xq-support" = true;
+    services = {
+      blueman.enable = true;
+
+      # Pipewire config (taken from NixOS wiki).
+      pipewire = {
+        enable = true;
+        alsa.enable = true;
+        alsa.support32Bit = true;
+        pulse.enable = true;
+
+        media-session.config.bluez-monitor.rules = [
+          {
+            # Matches all cards
+            matches = [ { "device.name" = "~bluez_card.*"; } ];
+            actions = {
+              "update-props" = {
+                "bluez5.reconnect-profiles" = [ "hfp_hf" "hsp_hs" "a2dp_sink" ];
+                # mSBC is not expected to work on all headset + adapter combinations.
+                "bluez5.msbc-support" = true;
+                # SBC-XQ is not expected to work on all headset + adapter combinations.
+                "bluez5.sbc-xq-support" = true;
+              };
             };
-          };
-        }
-        {
-          matches = [
-            # Matches all sources
-            { "node.name" = "~bluez_input.*"; }
-            # Matches all outputs
-            { "node.name" = "~bluez_output.*"; }
-          ];
-          actions = {
-            "node.pause-on-idle" = false;
-          };
-        }
-      ];
+          }
+          {
+            matches = [
+              # Matches all sources
+              { "node.name" = "~bluez_input.*"; }
+              # Matches all outputs
+              { "node.name" = "~bluez_output.*"; }
+            ];
+            actions = {
+              "node.pause-on-idle" = false;
+            };
+          }
+        ];
+      };
     };
 
     # Enable docker service.
