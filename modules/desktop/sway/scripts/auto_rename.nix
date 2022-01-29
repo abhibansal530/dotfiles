@@ -25,6 +25,7 @@ WINDOW_ICONS = {
     "bleachbit": "",
     "calibre": "",
     "chromium": "",
+    "chromium-browser": "",
     "code-oss": "",
     "draw.io": "",
     "firefox": "",
@@ -52,6 +53,7 @@ WINDOW_ICONS = {
     "virt-manager": "",
     "wofi": "",
     "org.pwmt.zathura": "",
+    ".blueman-manager-wrapped": "",
 }
 
 DEFAULT_ICON = "󰀏"
