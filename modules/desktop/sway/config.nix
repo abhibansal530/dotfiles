@@ -55,7 +55,7 @@ rec {
   };
 
   output = {
-    "*".bg = ''/home/abhi/Pictures/WallPapers/wallpaper.png fill'';
+    "*".bg = ''~/Pictures/WallPapers/wallpaper.png fill'';
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
       scale = "1.1";
@@ -79,7 +79,7 @@ rec {
     { command = "sway-auto-rename -l /tmp/sway_auto_rename.log" ; always = true; }
     {
       command =
-        let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :/home/abhi/Pictures/WallPapers/lock.png";
+        let lockCmd = "${pkgs.swaylock}/bin/swaylock -f -i :~/Pictures/WallPapers/lock.png";
         in
         ''
         ${pkgs.swayidle}/bin/swayidle -w \
@@ -141,7 +141,7 @@ rec {
       "${mod}+v" = "split v";
 
       # Lock screen.
-      "${mod}+z" = ''exec ${pkgs.swaylock}/bin/swaylock -i :/home/abhi/Pictures/WallPapers/lock.png'';
+      "${mod}+z" = ''exec ${pkgs.swaylock}/bin/swaylock -i :~/Pictures/WallPapers/lock.png'';
 
       # Dismiss mako notifications.
       "${mod}+x" = "exec ${pkgs.mako}/bin/makoctl dismiss";
@@ -204,7 +204,16 @@ rec {
       # Select a clipboard entry using rofi.
       "${mod}+Space" = "exec ${pkgs.clipman}/bin/clipman pick -t rofi";
 
-      # TODO : Screenshot.
+      # Screenshot utils.
+      ## Screenshot active display (output).
+      ## TODO : Pass --locked argument to bindsym.
+      "Print" = "exec grimshot --notify save output - | swappy -f -";
+
+      ## Screenshot active window.
+      "${mod}+Print" = "exec grimshot --notify save active - | swappy -f -";
+
+      ## Screenshot selected region.
+      "${mod}+Shift+Print" = "exec grimshot --notify save area - | swappy -f -";
     };
 
   modes = {

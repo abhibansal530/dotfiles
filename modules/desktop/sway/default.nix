@@ -125,6 +125,17 @@ in
         borderColor = "#4C7899";
         layer = "overlay"; # To show over fullscreen apps
       };
+
+      # Swappy config.
+      home.file.".config/swappy/config".text = ''
+        [Default]
+        save_dir=$HOME/Pictures/Screenshots
+        save_filename_format=screenshot_%Y%m%d-%H%M%S.png
+        show_panel=true
+        line_size=5
+        text_size=20
+        text_font=sans-serif
+      '';
     };
   };
 }
