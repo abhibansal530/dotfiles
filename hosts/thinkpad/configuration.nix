@@ -11,6 +11,8 @@ let
     '';
   });
 
+  aws-connect = import ./scripts/aws_vpn_connect.nix { inherit pkgs; };
+
 in
 {
   imports =
@@ -35,7 +37,14 @@ in
 
     # Misc
     slack
+
+    ## For AWS VPN.
+    aws-connect
+    openvpn_aws
   ];
+
+  # Required for Openvpn (for AWS VPN).
+  services.resolved.enable = true;
 
   # Config for my modules.
   _my.default-browser = "chromium";

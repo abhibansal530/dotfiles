@@ -52,9 +52,9 @@
       # Overlays provided by inputs.
       emacs.overlay
       nur.overlay
-    ];
+    ]
     # Overlays from ./overlays directory.
-    # ++ (importNixFiles ./overlays);
+    ++ (importNixFiles ./overlays);
 
     # Customize nixpkgs to use.
     myPkgs = import inputs.nixpkgs {
