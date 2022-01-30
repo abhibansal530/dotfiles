@@ -51,3 +51,4 @@
 (package! elfeed-goodies)
 (package! bazel
   :recipe (:host github :repo "bazelbuild/emacs-bazel-mode"))
+(package! gruvbox-theme)
