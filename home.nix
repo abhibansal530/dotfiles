@@ -16,6 +16,9 @@
       # Misc utils
       pkgs.pdftk # For pdf operations
       pkgs.unzip
+
+      # Media
+      pkgs.spotify-unwrapped
     ];
 
     # This value determines the Home Manager release that your
