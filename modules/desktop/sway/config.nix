@@ -58,7 +58,7 @@ rec {
     "*".bg = ''~/Pictures/WallPapers/wallpaper.png fill'';
     "HDMI-A-1" = {
       mode = "1920x1080@144.013Hz";
-      scale = "1.1";
+      scale = "1.2";
       subpixel = "rgb";
       adaptive_sync = "on";
     };
