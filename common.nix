@@ -114,6 +114,11 @@ in
 
       # Misc
       file
+      pandoc
+
+      # SSH Askpass
+      keychain
+      ssh-askpass-fullscreen
     ];
 
 

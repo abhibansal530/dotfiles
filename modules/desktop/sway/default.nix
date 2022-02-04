@@ -94,6 +94,7 @@ in
         MOZ_ENABLE_WAYLAND = 1;
         CLUTTER_BACKEND = "wayland";
         XDG_CURRENT_DESKTOP = "sway";
+        SSH_ASKPASS = "/run/current-system/sw/bin/ssh-askpass-fullscreen";
       };
 
       # Start on tty1
@@ -101,6 +102,8 @@ in
         if [[ $(tty) = /dev/tty1 ]]; then
           export XDG_SESSION_TYPE="wayland" # otherwise set to tty
           unset __HM_SESS_VARS_SOURCED __NIXOS_SET_ENVIRONMENT_DONE # otherwise sessionVariables are not updated
+          export SSH_ASKPASS="/run/current-system/sw/bin/ssh-askpass-fullscreen"
+          eval $(keychain --eval --quiet --confhost) # Start Keychain
           exec sway
         fi
       '';
