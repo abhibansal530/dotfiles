@@ -33,7 +33,7 @@ in
         settings = {
           general = {
             adjustment-method = "wayland";
-            brightness-day = 0.9;
+            brightness-day = 1.0;
             brightness-night = 1.0;
             gamma = "0.85:0.8:0.75";
           };
@@ -43,7 +43,7 @@ in
         };
         temperature = {
           day = 3300;
-          night = 3200;
+          night = 3300;
         };
       };
     };
