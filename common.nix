@@ -109,7 +109,7 @@ in
       gcc
 
       # go
-      go
+      go_1_17
       gopls
 
       # Misc
