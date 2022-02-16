@@ -35,12 +35,19 @@ in
     jdk11_headless # Required by bazel somehow
     bazel_4
 
-    # Misc
+    # Misc apps
     slack
 
     ## For AWS VPN.
     aws-connect
     openvpn_aws
+
+    ## K8
+    minikube
+    kubernetes-helm
+
+    ## Dev utils.
+    awscli2
   ];
 
   # Required for Openvpn (for AWS VPN).
