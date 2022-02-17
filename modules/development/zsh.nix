@@ -42,8 +42,7 @@ in
 
         shellAliases = {
           userctl = "systemctl --user";
-          kubectl = "minikube kubectl";
-          k = "minikube kubectl";
+          k = "kubectl";
         };
       };
     };

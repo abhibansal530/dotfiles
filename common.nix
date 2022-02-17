@@ -115,6 +115,7 @@ in
       # Misc
       file
       pandoc
+      killall
 
       # SSH Askpass
       keychain

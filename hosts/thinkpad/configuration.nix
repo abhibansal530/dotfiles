@@ -45,6 +45,7 @@ in
     ## K8
     minikube
     kubernetes-helm
+    kubectl
 
     ## Dev utils.
     awscli2
