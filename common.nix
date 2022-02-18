@@ -153,6 +153,17 @@ in
     services = {
       blueman.enable = true;
 
+      greetd = {
+        enable = true;
+        vt = 2;
+        settings = {
+          default_session = {
+            command = "${lib.makeBinPath [nixpkgs.greetd.tuigreet] }/tuigreet --time --cmd sway-run";
+            user = "greeter";
+          };
+        };
+      };
+
       # Pipewire config (taken from NixOS wiki).
       pipewire = {
         enable = true;
