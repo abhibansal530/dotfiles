@@ -8,6 +8,7 @@ let cfg = config._my.desktop.sway;
     sway-focus-or-open = import ./scripts/focus_or_open.nix { inherit pkgs; };
     sway-auto-rename = import ./scripts/auto_rename.nix { inherit pkgs; };
     sway-clamshell-helper = import ./scripts/sway_clamshell_helper.nix { inherit pkgs; };
+    sway-run = import ./scripts/sway_run.nix { inherit pkgs; };
     baseConfig = import ./config.nix { inherit config pkgs; };
 in
 {
@@ -54,6 +55,7 @@ in
         slurp # Select a region in wayland compositor
         sway-contrib.grimshot # Helper for screenshots in sway
         swappy # Wayland native snapshot editing tool.
+        greetd.tuigreet
       ];
 
       extraSessionCommands = ''
@@ -84,30 +86,6 @@ in
         extraConfig = import ./extra.nix { inherit pkgs; };
       };
 
-      home.sessionVariables = {
-        XDG_SESSION_TYPE = "wayland";
-        QT_QPA_PLATFORM = "wayland";
-        GDK_BACKEND = "wayland";
-        SDL_VIDEODRIVER = "wayland";
-        QT_WAYLAND_DISABLE_WINDOWDECORATOIN = 1;
-        _JAVA_AWT_WM_NONREPARENTING = 1;
-        MOZ_ENABLE_WAYLAND = 1;
-        CLUTTER_BACKEND = "wayland";
-        XDG_CURRENT_DESKTOP = "sway";
-        SSH_ASKPASS = "/run/current-system/sw/bin/ssh-askpass-fullscreen";
-      };
-
-      # Start on tty1
-      programs.zsh.initExtra = ''
-        if [[ $(tty) = /dev/tty1 ]]; then
-          export XDG_SESSION_TYPE="wayland" # otherwise set to tty
-          unset __HM_SESS_VARS_SOURCED __NIXOS_SET_ENVIRONMENT_DONE # otherwise sessionVariables are not updated
-          export SSH_ASKPASS="/run/current-system/sw/bin/ssh-askpass-fullscreen"
-          eval $(keychain --eval --quiet --confhost) # Start Keychain
-          exec sway
-        fi
-      '';
-
       # Packages
       home.packages = [
         # Custom scripts
@@ -115,6 +93,7 @@ in
         sway-focus-or-open
         sway-auto-rename
         sway-clamshell-helper
+        sway-run
       ];
 
 
