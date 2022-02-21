@@ -32,10 +32,12 @@ in pkgs.writeShellApplication rec {
     SRV=$(dig a +short "''${RAND}.''${VPN_HOST}"|head -n1)
 
     # cleanup
-    rm -f saml-response.txt
+    echo "Cleaup"
+    rm -f /tmp/saml-response.txt
 
     # start the saml response server and background it
     sudo rm /tmp/server.go
+    echo "Cleaup done"
     cp ${aws-vpn-helper-server} /tmp/server.go
     go run /tmp/server.go >> /tmp/aws-connect-saml-server.log 2>&1 &
 
@@ -50,12 +52,12 @@ in pkgs.writeShellApplication rec {
 
     unameOut="$(uname -s)"
     case "''${unameOut}" in
-        Linux*)     firefox "$URL";;
+        Linux*)     chromium-browser "$URL";;
         Darwin*)    open "$URL";;
         *)          echo "Could not determine 'open' command for this OS"; exit 1;;
     esac
 
-    wait_file "saml-response.txt" 30 || {
+    wait_file "/tmp/saml-response.txt" 30 || {
       echo "SAML Authentication time out"
       exit 1
     }
@@ -74,7 +76,7 @@ in pkgs.writeShellApplication rec {
         --up ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved \
         --down ${pkgs.update-systemd-resolved}/libexec/openvpn/update-systemd-resolved \
         --up-restart --down-pre \
-        --route-up '/usr/bin/env rm saml-response.txt' \
-        --auth-user-pass <( printf \"%s\n%s\n\" \"N/A\" \"CRV1::''${VPN_SID}::$(cat saml-response.txt)\" )"
+        --route-up '/usr/bin/env rm /tmp/saml-response.txt' \
+        --auth-user-pass <( printf \"%s\n%s\n\" \"N/A\" \"CRV1::''${VPN_SID}::$(cat /tmp/saml-response.txt)\" )"
   '';
 }
