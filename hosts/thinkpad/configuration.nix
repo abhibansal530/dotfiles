@@ -49,10 +49,16 @@ in
 
     ## Dev utils.
     awscli2
+
+    ## Virt
+    vagrant
   ];
 
   # Required for Openvpn (for AWS VPN).
   services.resolved.enable = true;
+
+  # Virtualbox.
+  virtualisation.virtualbox.host.enable = true;
 
   # Config for my modules.
   _my.default-browser = "chromium";
