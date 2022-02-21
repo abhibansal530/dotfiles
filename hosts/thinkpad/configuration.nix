@@ -64,6 +64,13 @@ in
         subpixel = "rgb";
         adaptive_sync = "on";
       };
+
+      "DP-2" = {
+        mode = "3840x2160@60.000Hz";
+        scale = "2";
+        subpixel = "rgb";
+        adaptive_sync = "on";
+      };
     };
 
     # TODO : Refactor startup apps in sway module.
